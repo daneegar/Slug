@@ -9,6 +9,10 @@
 import Foundation
 import CoreData
 
+enum ContextType {
+    case saveContext, mainContext
+}
+
 class CoreDataStack {
 
     private var storeUrl: URL {
@@ -37,21 +41,21 @@ class CoreDataStack {
         return coordinator
     }()
 
-    lazy public var masterContext: NSManagedObjectContext? = {
+    lazy private var masterContext: NSManagedObjectContext? = {
         var masterContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         masterContext.persistentStoreCoordinator = self.persitentSotreCoordinator
         masterContext.mergePolicy = NSMergePolicy.overwrite
         return masterContext
     }()
 
-    lazy public var mainContext: NSManagedObjectContext? = {
+    lazy private var mainContext: NSManagedObjectContext? = {
         let context = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
         context.parent = self.masterContext
         context.mergePolicy = NSMergePolicy.overwrite
         return context
 
     }()
-    lazy var saveContext: NSManagedObjectContext? = {
+    lazy private var saveContext: NSManagedObjectContext? = {
         let context = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         context.parent = self.mainContext
         context.mergePolicy = NSMergePolicy.overwrite
@@ -60,7 +64,6 @@ class CoreDataStack {
     }()
 
     typealias SaveComplition = () -> Void
-
     func performSave(with context: NSManagedObjectContext, complition: SaveComplition? = nil) {
         context.perform {
             guard context.hasChanges else {
@@ -77,6 +80,17 @@ class CoreDataStack {
             } else {
                 complition?()
             }
+        }
+    }
+    
+    func contex(contextType: ContextType) -> NSManagedObjectContext {
+        switch contextType {
+        case .mainContext:
+            guard let context = self.mainContext else {fatalError("Main Context hasn't been created")}
+            return context
+        case .saveContext:
+            guard let context = self.saveContext else {fatalError("Save Context hasn't been created")}
+            return context
         }
     }
 }

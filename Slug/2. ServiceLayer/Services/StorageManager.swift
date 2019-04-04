@@ -17,44 +17,36 @@ class StorageManager {
 
     let coreDataStack = CoreDataStack()
 
-    func loadOrInsertInMainThread<T: NSManagedObject> (anEntiti object: T.Type) -> T? {
-        if let context = self.coreDataStack.mainContext {
-            return self.findOrInsert(in: context, aModel: object)
-        }
-        print("context in load operation wasn't created")
-        return nil
-    }
-
-    func storeDataInMainThread(complition: @escaping () -> Void) {
-        if let context = self.coreDataStack.mainContext {
-            self.coreDataStack.performSave(with: context) {
+    func storeData(inTypeOfContext contextType: ContextType,complition: @escaping () -> Void) {
+        let context = self.coreDataStack.contex(contextType: contextType)
+        self.coreDataStack.performSave(with: context) {
                 complition()
-            }
-            return
         }
-        print("context in saving operation wasn't created")
     }
 
-    func insert<T: NSManagedObject>(in context: NSManagedObjectContext, aModel model: T.Type) -> T? {
+    func insert<T: NSManagedObject>(in contextType: ContextType, aModel model: T.Type) -> T? {
         var someData = model.init()
+        let context = self.coreDataStack.contex(contextType: contextType)
         context.performAndWait {
             someData = NSEntityDescription.insertNewObject(forEntityName: model.entity().name!, into: context) as! T
         }
         return someData
     }
     
-    func findOrInsert<T: NSManagedObject>(in context: NSManagedObjectContext, aModel model: T.Type) -> T? {
+    func findOrInsert<T: NSManagedObject>(in contextType: ContextType, aModel model: T.Type) -> T? {
         var entiti: T?
+        let context = self.coreDataStack.contex(contextType: contextType)
         context.performAndWait {
-            entiti = findFirst(in: context, aModel: T.self)
+            entiti = findFirst(in: contextType, aModel: T.self)
             if entiti == nil {
-                entiti = self.insert(in: context, aModel: T.self)
+                entiti = self.insert(in: contextType, aModel: T.self)
             }
         }
         return entiti
     }
     
-    func findFirst<T: NSManagedObject>(in context: NSManagedObjectContext, aModel entiti: T.Type) -> T? {
+    func findFirst<T: NSManagedObject>(in contextType: ContextType, aModel entiti: T.Type) -> T? {
+        let context = self.coreDataStack.contex(contextType: contextType)
         guard let model = context.persistentStoreCoordinator?.managedObjectModel else {
             print("Problem with modeling")
             return nil
@@ -69,23 +61,14 @@ class StorageManager {
                 let result = try context.fetch(fetchRequest)
                 blanc = result.first
             } catch {
-                print("FUCK")
+                print("Fetch request in context done with error")
             }
         }
         return blanc
     }
     
-    private func fetchRequestGeneral<T: NSManagedObject>(model: NSManagedObjectModel, forEntiti entiti: T.Type) ->NSFetchRequest<T>? {
-        guard let fetchRequest = T.fetchRequest() as? NSFetchRequest<T> else {return nil}
-        return fetchRequest
-    }
-    
-    private func countRequest<T: NSManagedObject>(model: NSManagedObject, for entiti: T.Type) -> Int? {
-        guard let countRequest = T.fetchRequest() as? NSFetchRequest<T> else {return nil}
-        return countRequest.accessibilityElementCount()
-    }
-    
-    func findLast<T: NSManagedObject>(in context: NSManagedObjectContext, aModel entiti: T.Type, withPredicate predicate: NSPredicate? = nil) -> T? {
+    func findLast<T: NSManagedObject>(in contextType: ContextType, aModel entiti: T.Type, withPredicate predicate: NSPredicate? = nil) -> T? {
+        let context = self.coreDataStack.contex(contextType: contextType)
         guard let model = context.persistentStoreCoordinator?.managedObjectModel else {
             print("Problem with modeling")
             return nil
@@ -106,10 +89,12 @@ class StorageManager {
         }
         return blanc
     }
-    func findAll<T: NSManagedObject>(ofType type: T.Type, in context: NSManagedObjectContext, byPropertyName name: String?, withMatch match: String?) -> [T]? {
+    
+    func findAll<T: NSManagedObject>(ofType type: T.Type, in contextType: ContextType, byPropertyName name: String?, withMatch match: String?) -> [T]? {
+        let context = self.coreDataStack.contex(contextType: contextType)
         guard let model = context.persistentStoreCoordinator?.managedObjectModel else {
-                print("Problem with modeling")
-                return nil
+            print("Problem with modeling")
+            return nil
         }
         guard let fetchRequest = self.fetchRequestGeneral(model: model, forEntiti: type) else {
             print("Fetch request hasn't been created")
@@ -131,10 +116,20 @@ class StorageManager {
         return blanc
     }
     
+    private func fetchRequestGeneral<T: NSManagedObject>(model: NSManagedObjectModel, forEntiti entiti: T.Type) ->NSFetchRequest<T>? {
+        guard let fetchRequest = T.fetchRequest() as? NSFetchRequest<T> else {return nil}
+        return fetchRequest
+    }
+    
+    private func countRequest<T: NSManagedObject>(model: NSManagedObject, for entiti: T.Type) -> Int? {
+        guard let countRequest = T.fetchRequest() as? NSFetchRequest<T> else {return nil}
+        return countRequest.accessibilityElementCount()
+    }
+    
     func frcPrepare<T: NSManagedObject>(ofType type: T.Type,
                                         sortedBy property: String?,
                                         asscending: Bool = false,
-                                        in context: NSManagedObjectContext,
+                                        in context: ContextType,
                                         withSelector selector: String?,
                                         delegate: NSFetchedResultsControllerDelegate,
                                         predicate: NSPredicate? = nil,
@@ -144,8 +139,8 @@ class StorageManager {
         fetchRequest.predicate = predicate
         let sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: property, ascending: asscending)
         fetchRequest.sortDescriptors = [sortDescriptor]
-        
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.coreDataStack.mainContext!, sectionNameKeyPath: selector, cacheName: nil)
+        let context = self.coreDataStack.contex(contextType: context)
+        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: selector, cacheName: nil)
         frc.delegate = delegate
         return frc as! NSFetchedResultsController<T>
     }
