@@ -48,12 +48,12 @@ class StorageManager {
     func findFirst<T: NSManagedObject>(in contextType: ContextType, aModel entiti: T.Type) -> T? {
         let context = self.coreDataStack.contex(contextType: contextType)
         guard let model = context.persistentStoreCoordinator?.managedObjectModel else {
-            print("Problem with modeling")
+            print("Problem with modeling \(#function)")
             return nil
         }
         var blanc: T?
         guard let fetchRequest = self.fetchRequestGeneral(model: model, forEntiti: entiti) else {
-            print("Fetch request hasn't been created")
+            print("Fetch request hasn't been created \(#function)")
             return nil
         }
         context.performAndWait {
@@ -61,7 +61,7 @@ class StorageManager {
                 let result = try context.fetch(fetchRequest)
                 blanc = result.first
             } catch {
-                print("Fetch request in context done with error")
+                print("Fetch request in context done with error in \(#function)")
             }
         }
         return blanc
@@ -70,11 +70,11 @@ class StorageManager {
     func findLast<T: NSManagedObject>(in contextType: ContextType, aModel entiti: T.Type, withPredicate predicate: NSPredicate? = nil) -> T? {
         let context = self.coreDataStack.contex(contextType: contextType)
         guard let model = context.persistentStoreCoordinator?.managedObjectModel else {
-            print("Problem with modeling")
+            print("Problem with modeling in \(#function)")
             return nil
         }
         guard let fetchRequest = self.fetchRequestGeneral(model: model, forEntiti: entiti) else {
-            print("Fetch request hasn't been created")
+            print("Fetch request hasn't been created in \(#function)")
             return nil
         }
         fetchRequest.predicate = predicate
@@ -84,7 +84,7 @@ class StorageManager {
                 let result = try context.fetch(fetchRequest)
                 blanc = result.last
             } catch {
-                print("FUCK")
+                print("Fetch request in context done with error in \(#function)")
             }
         }
         return blanc
@@ -93,11 +93,11 @@ class StorageManager {
     func findAll<T: NSManagedObject>(ofType type: T.Type, in contextType: ContextType, byPropertyName name: String?, withMatch match: String?) -> [T]? {
         let context = self.coreDataStack.contex(contextType: contextType)
         guard let model = context.persistentStoreCoordinator?.managedObjectModel else {
-            print("Problem with modeling")
+            print("Problem with modeling \(#function)")
             return nil
         }
         guard let fetchRequest = self.fetchRequestGeneral(model: model, forEntiti: type) else {
-            print("Fetch request hasn't been created")
+            print("Fetch request hasn't been created \(#function)")
             return nil
         }
         if let nameToPredicate = name, let matchToPredicate = match {
@@ -110,7 +110,7 @@ class StorageManager {
                 let result = try context.fetch(fetchRequest)
                 blanc = result
             } catch {
-                print("FUCK")
+                print("Fetch request in context done with error in \(#function)")
             }
         }
         return blanc
