@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="outGoingMessageCell" id="RSm-aZ-Ga2" customClass="MessageCell" customModule="Talks" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RSm-aZ-Ga2" id="0k6-UW-CHe">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Исходящее сообщение" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nwx-qE-q8Y">
+                        <rect key="frame" x="116.5" y="11" width="187.5" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottomMargin" secondItem="nwx-qE-q8Y" secondAttribute="bottom" constant="1" id="AXY-5I-4Gk"/>
+                    <constraint firstItem="nwx-qE-q8Y" firstAttribute="trailing" secondItem="0k6-UW-CHe" secondAttribute="trailingMargin" id="fxv-Uz-VSP"/>
+                    <constraint firstItem="nwx-qE-q8Y" firstAttribute="width" relation="lessThanOrEqual" secondItem="0k6-UW-CHe" secondAttribute="width" multiplier="0.75" id="q3Q-Za-AXQ"/>
+                    <constraint firstItem="nwx-qE-q8Y" firstAttribute="top" secondItem="0k6-UW-CHe" secondAttribute="topMargin" id="vtl-1X-K9W"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="9Vm-XY-ELk"/>
+            <connections>
+                <outlet property="labelOfOutGoingMessage" destination="nwx-qE-q8Y" id="LOX-qS-N4R"/>
+            </connections>
+            <point key="canvasLocation" x="138" y="10"/>
+        </tableViewCell>
+    </objects>
+</document>
