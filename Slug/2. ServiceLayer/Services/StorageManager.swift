@@ -126,7 +126,7 @@ class StorageManager {
         return countRequest.accessibilityElementCount()
     }
     
-    func frcPrepare<T: NSManagedObject>(ofType type: T.Type,
+    func prepareFetchResultController<T: NSManagedObject>(ofType type: T.Type,
                                         sortedBy property: String?,
                                         asscending: Bool = false,
                                         in context: ContextType,

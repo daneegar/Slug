@@ -21,9 +21,18 @@ class ConversationListViewController: UIViewController {
     @IBAction func toggleSwitch(_ sender: Any) {
 //        communicator?.communicator.online = isBrowserMode.isOn
     }
+    
+    var presenter: PresenterForConversationList?
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        let presenter = ConversationListPresenter(uiNavigationController: self.navigationController,
+                                                   uiViewController: self,
+                                                   tableView: self.tableViewOfChats,
+                                                   typesOfItems: User.self)
+        
+        presenter.viewControllerDidload()
+        self.presenter = presenter
         self.configCommunicator()
         self.tableViewOfChats.register(UINib(nibName: "ChatCell", bundle: nil), forCellReuseIdentifier: "ChatCell")
         self.tableViewOfChats.reloadData()
