@@ -25,10 +25,11 @@ class StorageManager {
     }
 
     func insert<T: NSManagedObject>(in contextType: ContextType, aModel model: T.Type) -> T? {
-        var someData = model.init()
+        
         let context = self.coreDataStack.contex(contextType: contextType)
+        var someData: T?
         context.performAndWait {
-            someData = NSEntityDescription.insertNewObject(forEntityName: model.entity().name!, into: context) as! T
+            someData = NSEntityDescription.insertNewObject(forEntityName: model.entity().name!, into: context) as? T
         }
         return someData
     }

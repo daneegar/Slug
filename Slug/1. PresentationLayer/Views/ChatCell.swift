@@ -30,19 +30,19 @@ class ChatCell: UITableViewCell {
         
         // Configure the view for the selected state
     }
-//    func configProperies(withChatModel instance: User) {
-//        self.name = instance.id
+    func configProperies(withChatModel instance: User) {
+        self.name = instance.name
 //        if let id = instance.id {
 //            self.message = RequestAndFetchingHandler.fetchLastMessage(byID: id)
 //        }
 //        self.date = self.message?.createTimeStamp
-//        self.online = instance.online
+        self.online = instance.isOnline
 //        if let knownState = self.message?.isUnreaded {
 //            self.hasUnreadMessages = knownState
 //        }
-//        self.configCellView()
-//
-//    }
+        self.configCellView()
+
+    }
     
     func configCellView() {
         self.nameLabel.text = name
@@ -57,11 +57,11 @@ class ChatCell: UITableViewCell {
             self.lastText.font = UIFont.boldSystemFont(ofSize: 16.0)
         }
         
-        let datesHandler = DatesHandler()
-        if let date = self.date {
-            self.lastDateLabel.text = datesHandler.stringWithChoisedFromatter(withDate: date,
-                                                                              howManyDaysMeansIsRecent: 1)
-        }
+//        let datesHandler = DatesHandler()
+//        if let date = self.date {
+//            self.lastDateLabel.text = datesHandler.stringWithChoisedFromatter(withDate: date,
+//                                                                              howManyDaysMeansIsRecent: 1)
+//        }
         
         self.backgroundColor = self.online ? UIColor(rgb: 0xDBE5C6, alpha: 0.3) : UIColor.white
     }

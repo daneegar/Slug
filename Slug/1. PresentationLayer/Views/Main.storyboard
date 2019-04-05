@@ -112,7 +112,7 @@
         <!--Navigation Controller-->
         <scene sceneID="G45-PR-PtG">
             <objects>
-                <navigationController id="W69-hx-Agg" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="mainUserProfile" id="W69-hx-Agg" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="YMC-Vz-N13">
                         <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -350,7 +350,7 @@
                         </switch>
                         <barButtonItem key="rightBarButtonItem" image="user_male" id="w9H-vu-i6P">
                             <connections>
-                                <segue destination="W69-hx-Agg" kind="presentation" id="OaS-SG-Psw"/>
+                                <action selector="showProfileViewController:" destination="yfy-ZF-c2v" id="Oxl-OT-WIt"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

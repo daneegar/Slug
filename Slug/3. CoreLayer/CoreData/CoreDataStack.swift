@@ -65,7 +65,7 @@ class CoreDataStack {
 
     typealias SaveComplition = () -> Void
     func performSave(with context: NSManagedObjectContext, complition: SaveComplition? = nil) {
-        context.perform {
+        context.performAndWait {
             guard context.hasChanges else {
                 complition?()
                 return
