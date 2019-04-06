@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 
 class CameraHandler: NSObject {
+    
     fileprivate weak var currentVC: UIViewController!
 
     func camera() {

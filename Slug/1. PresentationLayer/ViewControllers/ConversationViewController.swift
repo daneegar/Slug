@@ -10,16 +10,23 @@ enum MessageType: String {
     case outGoingMessage = "outGoingMessageCell"
 }
 
+
+
 import UIKit
 import MultipeerConnectivity
-//import CoreData.NSFetchedResultsController
+
+protocol ConversationViewControllerProtocol: UIViewController {
+    func initConversation(conversation: Conversation)
+}
 
 class ConversationViewController: UIViewController {
     @IBOutlet weak var textMessageView: UITextView!
     @IBOutlet weak var textViewHeight: NSLayoutConstraint!
     @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var mainView: UIView!
+    var presenter: PresenterForConversationViewController!
     var keyboardIsShown = false
+    var conversation: Conversation!
 //    var frc: NSFetchedResultsController<Message>?
     @IBAction func sendButtonPressed(_ sender: Any) {
 //        self.sendAnMessage()
@@ -29,6 +36,10 @@ class ConversationViewController: UIViewController {
 //    var userID: User?
 //    var conversation: [MessageStruct] = []
     override func viewDidLoad() {
+        self.presenter = ConversationPresenter(uiNavigationController: self.navigationController,
+                                               uiViewController: self,
+                                               tableView: self.converstaionTableView,
+                                               conversation: self.conversation)
         self.converstaionTableView.register(UINib(nibName: "IncomingMessagCell", bundle: nil),
                                             forCellReuseIdentifier: MessageType.inComingMessage.rawValue)
         super.viewDidLoad()
@@ -52,7 +63,7 @@ class ConversationViewController: UIViewController {
                                                name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide),
                                                name: UIResponder.keyboardWillHideNotification, object: nil)
-        self.converstaionTableView.reloadData()
+//        self.converstaionTableView.reloadData()
     }
     // MARK: - lets test ConversationViewController
     func richConversation() {
@@ -67,13 +78,13 @@ class ConversationViewController: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        if self.isMovingFromParent {
-            guard let parentViewControoler = self.parent?.children[0] as? ConversationListViewController else {return}
-//            parentViewControoler.communicator?.delegate = parentViewControoler
-            parentViewControoler.tableViewOfChats.reloadData()
-        }
+//        super.viewWillDisappear(animated)
+//        
+//        if self.isMovingFromParent {
+//            guard let parentViewControoler = self.parent?.children[0] as? ConversationListViewController else {return}
+////            parentViewControoler.communicator?.delegate = parentViewControoler
+//            parentViewControoler.tableViewOfChats.reloadData()
+//        }
     }
 }
 
@@ -190,3 +201,9 @@ extension ConversationViewController: UITextViewDelegate {
 //        }
 //    }
 //}
+
+extension ConversationViewController: ConversationViewControllerProtocol {
+    func initConversation(conversation: Conversation) {
+        self.conversation = conversation
+    }
+}

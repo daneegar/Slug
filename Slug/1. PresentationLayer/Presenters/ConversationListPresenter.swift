@@ -11,7 +11,7 @@ import UIKit
 import CoreData.NSFetchedResultsController
 import AssetsLibrary
 
-protocol PresenterForConversationList: UITableViewDataSource {
+protocol PresenterForConversationList: class, UITableViewDataSource {
     func presentMainUserView(presentType: PresentType)
     func showView(forItem indexPath: IndexPath, presentType: PresentType)
     func switcherWasToggled(isOn: Bool)
@@ -23,9 +23,9 @@ enum PresentType {
 
 class ConversationListPresenter: NSObject, PresenterForConversationList {
     
-    private var uiNavigationViewControllerToWorkWith: UINavigationController
-    private var uiViewControllerToWorkWith: UIViewController
-    private var tableViewToWorkWith: UITableView
+    private weak var uiNavigationViewControllerToWorkWith: UINavigationController!
+    private weak var uiViewControllerToWorkWith: UIViewController!
+    private weak var tableViewToWorkWith: UITableView!
     var frc: NSFetchedResultsController<User>?
     
 
@@ -42,12 +42,29 @@ class ConversationListPresenter: NSObject, PresenterForConversationList {
     }
     
     func presentMainUserView(presentType: PresentType) {
-        guard let mvc = uiViewControllerToWorkWith.storyboard?.instantiateViewController(withIdentifier: "mainUserProfile") else {return}
-        uiViewControllerToWorkWith.present(mvc, animated: true)
+        guard let profileViewController = uiViewControllerToWorkWith.storyboard?.instantiateViewController(withIdentifier: "mainUserProfile") else {return}
+        uiViewControllerToWorkWith.present(profileViewController, animated: true)
     }
     
     func showView(forItem indexPath: IndexPath, presentType: PresentType) {
-        
+        guard let conversationViewController = self.uiViewControllerToWorkWith.storyboard?.instantiateViewController(withIdentifier: "conversationViewController") as? ConversationViewControllerProtocol else {return}
+        guard let user = self.frc?.object(at: indexPath) else {
+            print("there is know user in indexPath \(indexPath)")
+            return
+        }
+        if let conversation = user.conversation {
+            conversationViewController.initConversation(conversation: conversation)
+            self.uiNavigationViewControllerToWorkWith.pushViewController(conversationViewController, animated: true)
+            return
+        }
+        guard let conversation = StorageManager.singleton.findOrInsert(in: .mainContext, aModel: Conversation.self) else {fatalError("Conversation hasn't been created or loaded \(#function)")}
+        conversation.id = user.id
+        user.conversation = conversation
+        StorageManager.singleton.storeData(inTypeOfContext: .mainContext) {
+            self.uiNavigationViewControllerToWorkWith.pushViewController(conversationViewController, animated: true)
+            conversationViewController.initConversation(conversation: conversation)
+        }
+
     }
     
     func switcherWasToggled(isOn: Bool) {
@@ -75,21 +92,12 @@ class ConversationListPresenter: NSObject, PresenterForConversationList {
                 print("Main user has been loaded or saver")
             }
         }
-        self.frc = self.createFrc(withType: User.self)
+        self.frc = FRCManager.createFrcForConversationListViewController(delegate: self)
         self.performFetch()
         //print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
     }
     
-    private func createFrc <T:NSManagedObject> (withType: T.Type) -> NSFetchedResultsController<T> {
-        return StorageManager.singleton.prepareFetchResultController(ofType: withType,
-                                                              sortedBy: "name",
-                                                              asscending: true,
-                                                              in: .mainContext,
-                                                              withSelector: "isOnline",
-                                                              delegate: self,
-                                                              predicate: nil,
-                                                              offset: 1)
-    }
+
     
     private func performFetch() {
         do {
@@ -133,7 +141,13 @@ extension ConversationListPresenter: UITableViewDataSource {
         guard let sectionInfo = self.frc?.sections?[section] else {
             return nil
         }
-        return sectionInfo.name
+        let title: String
+        if sectionInfo.name == "0" {
+            title = "Offline"
+        } else {
+            title = "Online"
+        }
+        return title
     }
     
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {

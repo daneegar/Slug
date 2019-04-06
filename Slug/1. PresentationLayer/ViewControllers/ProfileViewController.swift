@@ -11,21 +11,17 @@ protocol TakeImageDelegate: class {
     func pickTaken(image takenImage: UIImage)
 }
 
-protocol MainUserProfileView {
+protocol MainUserProfileView: UIViewController {
     func profileLoaded(name: String, informationAbout: String, profilePhoto: UIImage?)
     func show(allert: UIAlertAction)
 }
 
 class ProfileViewController: UIViewController, UINavigationControllerDelegate, TakeImageDelegate {
     var presenter: PresenterForProfileViewController?
-    let cameraHandler = CameraHandler()
+    var cameraHandler = CameraHandler()
     var keyboardHeight: CGFloat!
     var activeField: UITextView?
     let activityIndicator = UIActivityIndicatorView(style: .gray)
-    enum QueueMethods {
-        case GCD
-        case operations
-    }
     private var editingModeOn = false
     @IBOutlet weak var profilePhoto: UIImageView!
     @IBOutlet weak var buttonsView: UIViewAnimating!
@@ -58,6 +54,7 @@ class ProfileViewController: UIViewController, UINavigationControllerDelegate, T
     }
 
     @IBAction func gcdButtonPressed(_ sender: Any) {
+        
     }
 
     @IBAction func operationButtonPressed(_ sender: Any) {

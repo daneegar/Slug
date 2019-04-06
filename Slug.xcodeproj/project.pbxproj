@@ -28,6 +28,8 @@
 		923B416322576DEB00BFBB5E /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923B416222576DEB00BFBB5E /* User.swift */; };
 		923B416522576E3400BFBB5E /* RandomData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923B416422576E3400BFBB5E /* RandomData.swift */; };
 		923B41682257967700BFBB5E /* ProfileViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923B41672257967700BFBB5E /* ProfileViewPresenter.swift */; };
+		923B416A22592CB800BFBB5E /* ConversationPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923B416922592CB800BFBB5E /* ConversationPresenter.swift */; };
+		923B416C22593A3700BFBB5E /* FRCManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923B416B22593A3700BFBB5E /* FRCManager.swift */; };
 		92BCB8EC22563FF70042261F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BCB8EB22563FF70042261F /* AppDelegate.swift */; };
 		92BCB8F422563FF70042261F /* Slug.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 92BCB8F222563FF70042261F /* Slug.xcdatamodeld */; };
 		92BCB8F622563FF80042261F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92BCB8F522563FF80042261F /* Assets.xcassets */; };
@@ -61,6 +63,8 @@
 		923B416222576DEB00BFBB5E /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		923B416422576E3400BFBB5E /* RandomData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RandomData.swift; sourceTree = "<group>"; };
 		923B41672257967700BFBB5E /* ProfileViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewPresenter.swift; sourceTree = "<group>"; };
+		923B416922592CB800BFBB5E /* ConversationPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationPresenter.swift; sourceTree = "<group>"; };
+		923B416B22593A3700BFBB5E /* FRCManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FRCManager.swift; sourceTree = "<group>"; };
 		92BCB8E822563FF70042261F /* Slug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Slug.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92BCB8EB22563FF70042261F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		92BCB8F322563FF70042261F /* Slug.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Slug.xcdatamodel; sourceTree = "<group>"; };
@@ -129,6 +133,7 @@
 			children = (
 				923B415F2256A5D000BFBB5E /* ConversationListPresenter.swift */,
 				923B41672257967700BFBB5E /* ProfileViewPresenter.swift */,
+				923B416922592CB800BFBB5E /* ConversationPresenter.swift */,
 			);
 			path = Presenters;
 			sourceTree = "<group>";
@@ -200,6 +205,7 @@
 				923B41462256972100BFBB5E /* DatesHandler.swift */,
 				923B41482256973600BFBB5E /* MultipeerCommunicator.swift */,
 				923B414A2256983B00BFBB5E /* StorageManager.swift */,
+				923B416B22593A3700BFBB5E /* FRCManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -373,6 +379,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				92BCB911225644DB0042261F /* ServicesAssembly.swift in Sources */,
+				923B416C22593A3700BFBB5E /* FRCManager.swift in Sources */,
 				923B414F225699B800BFBB5E /* EnDecoding.swift in Sources */,
 				92BCB90C2256434E0042261F /* RootAssembly.swift in Sources */,
 				923B41492256973700BFBB5E /* MultipeerCommunicator.swift in Sources */,
@@ -383,6 +390,7 @@
 				923B41452256965000BFBB5E /* ConversationViewController.swift in Sources */,
 				923B416322576DEB00BFBB5E /* User.swift in Sources */,
 				923B41472256972100BFBB5E /* DatesHandler.swift in Sources */,
+				923B416A22592CB800BFBB5E /* ConversationPresenter.swift in Sources */,
 				92BCB913225644F40042261F /* CoreAssembly.swift in Sources */,
 				92BCB8F422563FF70042261F /* Slug.xcdatamodeld in Sources */,
 				923B41682257967700BFBB5E /* ProfileViewPresenter.swift in Sources */,

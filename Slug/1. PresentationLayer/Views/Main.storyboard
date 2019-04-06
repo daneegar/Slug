@@ -13,18 +13,14 @@
         <!--Conversation View Controller-->
         <scene sceneID="EKU-TG-7WU">
             <objects>
-                <viewController id="ciK-qw-2Xu" customClass="ConversationViewController" customModule="Slug" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="conversationViewController" id="ciK-qw-2Xu" customClass="ConversationViewController" customModule="Slug" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8G4-Uy-LBU">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="bMQ-8y-ECg">
-                                <rect key="frame" x="0.0" y="64" width="320" height="452"/>
+                                <rect key="frame" x="0.0" y="20" width="320" height="496"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <connections>
-                                    <outlet property="dataSource" destination="ciK-qw-2Xu" id="Bbd-kQ-EgT"/>
-                                    <outlet property="delegate" destination="ciK-qw-2Xu" id="Qpe-5M-AdP"/>
-                                </connections>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3TT-9F-Cze">
                                 <rect key="frame" x="0.0" y="516" width="320" height="52"/>
@@ -357,7 +353,6 @@
                     <connections>
                         <outlet property="isBrowserMode" destination="apa-9P-bSU" id="clo-2E-heQ"/>
                         <outlet property="tableViewOfChats" destination="Gkw-wu-lkR" id="5KN-7R-3Ke"/>
-                        <segue destination="ciK-qw-2Xu" kind="show" identifier="toChat" id="gYp-7R-A72"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="78O-g9-ax8" userLabel="First Responder" sceneMemberID="firstResponder"/>

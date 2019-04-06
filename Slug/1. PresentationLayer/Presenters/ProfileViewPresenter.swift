@@ -16,16 +16,8 @@ import Foundation
 import UIKit.UIAlertController
 
 class ProfileViewPresenter: NSObject, PresenterForProfileViewController {
-
-    
-
-    
-    weak var viewControlerToWorkWith: ProfileViewController?
+    weak var viewControlerToWorkWith: MainUserProfileView!
     let mainUserProfile: User
-    lazy var unwrapedViewControllerToWorkWith: ProfileViewController = {
-        guard let vc = self.viewControlerToWorkWith else {fatalError("")}
-        return vc
-    }()
     let okAllert = UIAlertController(title: "Данные сохранены", message: nil, preferredStyle: .alert)
     
     private func setupAllerts() {
@@ -41,13 +33,13 @@ class ProfileViewPresenter: NSObject, PresenterForProfileViewController {
         self.mainUserProfile.name = name
         self.mainUserProfile.aboutInformation = info
         self.mainUserProfile.avatar = image?.jpegData(compressionQuality: 1.0)
-        StorageManager.singleton.storeData(inTypeOfContext: .saveContext) {
+        StorageManager.singleton.storeData(inTypeOfContext: .mainContext) {
             print("Данные сохранены")
         }
     }
     
     func doneButtonPressed() {
-        self.unwrapedViewControllerToWorkWith.dismiss(animated: true, completion: nil)
+        self.viewControlerToWorkWith.dismiss(animated: true, completion: nil)
     }
     
     func viewControllerDidLoad() {
@@ -64,6 +56,6 @@ class ProfileViewPresenter: NSObject, PresenterForProfileViewController {
             let photo = UIImage(data: dataPhoto)
             profilePhoto = photo
         } else {profilePhoto = nil}
-        self.unwrapedViewControllerToWorkWith.profileLoaded(name: name, informationAbout: aboutInfo, profilePhoto: profilePhoto)
+        self.viewControlerToWorkWith.profileLoaded(name: name, informationAbout: aboutInfo, profilePhoto: profilePhoto)
     }
 }
