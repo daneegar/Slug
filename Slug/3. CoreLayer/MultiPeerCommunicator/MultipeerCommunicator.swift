@@ -19,12 +19,12 @@ protocol  CommunicatorDelegate: class {
     func failedToStartAdvertising(error: Error)
     
     //messages
-    //func didRecieveMessage(text: MessageStruct, fromUser: String, toUser: String)
+    func didRecieve(message jsonData: Data, fromUser: String)
 }
 
 protocol Communicator {
-//    func sendMessage(string: MessageStruct, to userID: String,
-//                     complitionHandler : ((_ success: Bool, _ error: Error?) -> Void)?)
+    func send(aMessage jsonData: Data, toUserId userID: String,
+                     complitionHandler : ((_ success: Bool, _ error: Error?) -> Void)?)
     var delegate: CommunicatorDelegate? {get set}
     var online: Bool {get set}
 }
@@ -53,40 +53,53 @@ class MultipeerCommunicator: NSObject, Communicator {
             }
         }
     }
-//    func sendMessage(string: MessageStruct, to userID: String, complitionHandler: ((Bool, Error?) -> Void)?) {
-//        let jsonObject = NSMutableDictionary()
-//        jsonObject.setValue("TextMessage", forKey: "eventType")
-//        jsonObject.setValue(self.generateMessageId(), forKey: "messageId")
-//        jsonObject.setValue(string, forKey: "text")
-//        do {
-//        let jsonData =  try JSONEncoder().encode(string)
-//            for peer in self.session.connectedPeers where peer.displayName == userID {
-//                try self.session.send(jsonData, toPeers: [peer], with: .reliable)
-//            }
-//        } catch {
-//            print(error)
-//        }
-//    }
+    func send(aMessage jsonData: Data, toUserId userID: String, complitionHandler: ((Bool, Error?) -> Void)?) {
+        do {
+            for peer in self.session.connectedPeers where peer.displayName == userID {
+                try self.session.send(jsonData, toPeers: [peer], with: .reliable)
+            }
+        } catch {
+            print(error)
+        }
+    }
 
     var session: MCSession
 
-    init(_ peerIDdisplayName: String) {
-        self.myPeerId = MCPeerID(displayName: peerIDdisplayName)
-        self.discoveryInfo = ["userName": peerIDdisplayName]
+    init(_ peerID: String, _ displayName: String, _ delegate: CommunicatorDelegate) {
+        let encodedPeerId = MultipeerCommunicator.encodePeer(withName: peerID, andName: displayName)
+        self.myPeerId = MCPeerID(displayName: encodedPeerId)
+        self.discoveryInfo = ["userName": displayName]
         self.serviceAdvertiser = MCNearbyServiceAdvertiser(peer: self.myPeerId,
                                                            discoveryInfo: self.discoveryInfo,
                                                            serviceType: self.serviceType)
         self.serviceBrowser = MCNearbyServiceBrowser(peer: self.myPeerId, serviceType: self.serviceType)
         self.session = MCSession(peer: self.myPeerId, securityIdentity: nil, encryptionPreference: .required)
+        self.delegate = delegate
         self.online = true
-
         super.init()
-
         self.session.delegate = self
         self.serviceAdvertiser.delegate = self
         self.serviceBrowser.delegate = self
         self.serviceAdvertiser.startAdvertisingPeer()
         self.serviceBrowser.startBrowsingForPeers()
+    }
+    
+    static private func encodePeer(withName id: String, andName name: String) -> String {
+        var codedPeerID: String = String()
+        codedPeerID.append(id)
+        codedPeerID.append("&")
+        codedPeerID.append(name)
+        return codedPeerID
+    }
+    
+    private func decodePeer(displayName: String, complition: ((String, String)->Void))
+    {
+        let idAndName = displayName.split(separator: "&")
+        if idAndName.count != 2 {
+            print("decode of user display name finished With error \(idAndName.count)")
+        } else {
+            complition(String(idAndName.first!), String(idAndName.last!))
+        }
     }
 
     deinit {
@@ -137,7 +150,6 @@ extension MultipeerCommunicator: MCSessionDelegate {
 //            //let message = try decoder.decode(MessageStruct.self, from: data)
 //            //self.delegate?.didRecieveMessage(text: message, fromUser: peerID.displayName, toUser: "")
 //        } catch {print("date ComesLike Shit")}
-
     }
 
     func session(_ session: MCSession,
@@ -166,19 +178,20 @@ extension MultipeerCommunicator: MCSessionDelegate {
         //print(#function)
         switch state {
         case MCSessionState.connected:
-            print("Connected: \(peerID.displayName)")
-            DispatchQueue.main.async {
-                self.delegate?.didFoundUser(userID: peerID.displayName, userName: peerID.displayName)
+            self.decodePeer(displayName: peerID.displayName) { (id, name) in
+                print("Connected: \(name) with id: \(id)")
+                self.delegate?.didFoundUser(userID: id, userName: name)
             }
         case MCSessionState.connecting:
-            print("Connecting: \(peerID.displayName)")
-
-        case MCSessionState.notConnected:
-            print("Not Connected: \(peerID.displayName)")
-            DispatchQueue.main.async {
-                self.delegate?.didLostUser(userID: peerID.displayName)
-
+            self.decodePeer(displayName: peerID.displayName) { (id, name) in
+                print("Connecting: \(name) with id: \(id)")
             }
+        case MCSessionState.notConnected:
+            self.decodePeer(displayName: peerID.displayName) { (id, name) in
+                print("Not Connected: \(name) with id: \(id)")
+                self.delegate?.didLostUser(userID: id)
+            }
+            
         @unknown default:
             print ("Unknown state comming in session")
         }

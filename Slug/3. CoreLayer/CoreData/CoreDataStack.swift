@@ -17,6 +17,7 @@ class CoreDataStack {
 
     private var storeUrl: URL {
         let documentsUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        print(documentsUrl)
         return documentsUrl.appendingPathComponent("MyStore.sqlite")
     }
 
@@ -51,7 +52,7 @@ class CoreDataStack {
     lazy private var mainContext: NSManagedObjectContext? = {
         let context = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
         context.parent = self.masterContext
-        context.mergePolicy = NSMergePolicy.overwrite
+        context.mergePolicy = NSMergePolicy.mergeByPropertyStoreTrump
         return context
 
     }()

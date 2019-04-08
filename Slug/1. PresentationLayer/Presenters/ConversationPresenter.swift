@@ -118,3 +118,4 @@ extension ConversationPresenter: NSFetchedResultsControllerDelegate {
         }
     }
 }
+

@@ -12,13 +12,13 @@ import CoreData.NSFetchedResultsController
 class FRCManager {
     static func createFrcForConversationListViewController (delegate: NSFetchedResultsControllerDelegate) -> NSFetchedResultsController<User> {
         return StorageManager.singleton.prepareFetchResultController(ofType: User.self,
-                                                                     sortedBy: "name",
+                                                                     sortedBy: "id",
                                                                      asscending: true,
                                                                      in: .mainContext,
                                                                      withSelector: "isOnline",
                                                                      delegate: delegate,
                                                                      predicate: nil,
-                                                                     offset: 1)
+                                                                     offset: 0)
     }
     
     static func frcForMessages(delegate: NSFetchedResultsControllerDelegate, forConversationId id: String) ->NSFetchedResultsController<Message> {
@@ -33,13 +33,14 @@ class FRCManager {
     }
     
     private static func general <T:NSManagedObject> (withType: T.Type, delegate: NSFetchedResultsControllerDelegate) -> NSFetchedResultsController<T> {
+    
         return StorageManager.singleton.prepareFetchResultController(ofType: withType,
-                                                                     sortedBy: "name",
+                                                                     sortedBy: "id",
                                                                      asscending: true,
                                                                      in: .mainContext,
                                                                      withSelector: "isOnline",
                                                                      delegate: delegate,
                                                                      predicate: nil,
-                                                                     offset: 1)
+                                                                     offset: 0)
     }
 }

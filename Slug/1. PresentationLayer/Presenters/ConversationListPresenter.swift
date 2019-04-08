@@ -21,13 +21,20 @@ enum PresentType {
     case modal, pushInNavigationStack
 }
 
-class ConversationListPresenter: NSObject, PresenterForConversationList {
+class ConversationListPresenter: NSObject, PresenterForConversationList, CommunicationManagerInjector {
     
     private weak var uiNavigationViewControllerToWorkWith: UINavigationController!
     private weak var uiViewControllerToWorkWith: UIViewController!
     private weak var tableViewToWorkWith: UITableView!
+    var sectionIndexTitles = ["Online", "Offline"]
     var frc: NSFetchedResultsController<User>?
-    
+    var mainUser: User? {
+        willSet {
+            if let value = newValue {
+                self.configCommunicationManager(withMain: value)
+            }
+        }
+    }
 
     init (uiNavigationController: UINavigationController?, uiViewController: UIViewController?, tableView: UITableView?, typesOfItems: NSManagedObject.Type = User.self) {
         if let unc = uiNavigationController, let uivc = uiViewController, let tv = tableView {
@@ -37,8 +44,8 @@ class ConversationListPresenter: NSObject, PresenterForConversationList {
         }
         else {fatalError("There is no some components in ViewController")}
         super.init()
-        self.findOrInitTheMainUser()
         self.tableViewToWorkWith.dataSource = self
+        self.findOrInitTheMainUser()
     }
     
     func presentMainUserView(presentType: PresentType) {
@@ -57,47 +64,44 @@ class ConversationListPresenter: NSObject, PresenterForConversationList {
             self.uiNavigationViewControllerToWorkWith.pushViewController(conversationViewController, animated: true)
             return
         }
-        guard let conversation = StorageManager.singleton.findOrInsert(in: .mainContext, aModel: Conversation.self) else {fatalError("Conversation hasn't been created or loaded \(#function)")}
-        conversation.id = user.id
-        user.conversation = conversation
-        StorageManager.singleton.storeData(inTypeOfContext: .mainContext) {
-            self.uiNavigationViewControllerToWorkWith.pushViewController(conversationViewController, animated: true)
-            conversationViewController.initConversation(conversation: conversation)
-        }
-
     }
     
     func switcherWasToggled(isOn: Bool) {
         
     }
     
-    private func findOrInitTheMainUser() {
-        guard let mainUser = StorageManager.singleton.findOrInsert(in: .mainContext, aModel: User.self) else {fatalError("MainUser hasn't been created or loaded")}
-        var isInititiate: Bool = false
-        if mainUser.name == nil {
-            mainUser.name = "unNamed"
-            isInititiate = true
-        }
-        if mainUser.id == nil {
-            mainUser.generateId()
-            isInititiate = true
-        }
-        if mainUser.avatar == nil {
-            mainUser.avatar = UIImage(named: "placeholder-user")?.jpegData(compressionQuality: 1.0)
-            isInititiate = true
-        }
-        mainUser.isOnline = true
-        if isInititiate {
-            StorageManager.singleton.storeData(inTypeOfContext: .mainContext) {
-                print("Main user has been loaded or saver")
+    private func findOrInitTheMainUser(){
+        StorageManager.singleton.findOrInsert(in: .mainContext, aModel: User.self, complition: {(savedOrCreatedUser) in
+            var isInititiate: Bool = false
+            guard let user = savedOrCreatedUser else {fatalError("Main User hasn't been created or founded")}
+            if user.name == nil {
+                user.name = "unNamed"
+                isInititiate = true
             }
-        }
-        self.frc = FRCManager.createFrcForConversationListViewController(delegate: self)
-        self.performFetch()
-        //print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
+            if user.id == nil {
+                user.generateId()
+                isInititiate = true
+            }
+            if user.avatar == nil {
+                user.avatar = UIImage(named: "placeholder-user")?.jpegData(compressionQuality: 1.0)
+                isInititiate = true
+            }
+            user.isOnline = true
+            self.mainUser = user
+            self.frc = FRCManager.createFrcForConversationListViewController(delegate: self)
+            self.performFetch()
+        })
     }
     
-
+    private func configCommunicationManager(withMain user: User) {
+        if let id = user.id, let name = user.name {
+            self.communicationManager.set(userID: id, userName: name)
+        } else {
+            print("Communication manager cann't be configured without name or id of Main User")
+            return
+        }
+        self.communicationManager.beginAdvertising(browsingIsOn: true)
+    }
     
     private func performFetch() {
         do {
@@ -113,10 +117,9 @@ class ConversationListPresenter: NSObject, PresenterForConversationList {
 extension ConversationListPresenter: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        if let frc = self.frc, let sections = frc.sections {
-            return sections.count
-        }
-        return 0
+        let frc = self.frc
+        let sections = frc?.sections
+        return sections?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -150,10 +153,6 @@ extension ConversationListPresenter: UITableViewDataSource {
         return title
     }
     
-    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        return self.frc?.sectionIndexTitles
-    }
-    
     func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
         guard let result = self.frc?.section(forSectionIndexTitle: title, at: index) else {
             fatalError("Unable to locate section for \(title) at index: \(index)")
@@ -162,7 +161,7 @@ extension ConversationListPresenter: UITableViewDataSource {
     }
     
 }
-///Users/denis/Library/Developer/CoreSimulator/Devices/62DD715A-7A4F-4274-8BC4-801301C1F854/data/Containers/Bundle/Application/1B2307FB-8141-43F7-AECF-F3C932B6E8FD/Slug.app/
+
 extension ConversationListPresenter: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         self.tableViewToWorkWith.endUpdates()
@@ -187,6 +186,24 @@ extension ConversationListPresenter: NSFetchedResultsControllerDelegate {
             print("FetchResultController back the uknowed Change type")
         }
     }
+    func sectionIndexTitle(forSectionName sectionName: String) -> String? {
+        print("\(#function)")
+        return nil
+    }
+    
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
+        switch type {
+        case .insert:
+            self.tableViewToWorkWith.insertSections(IndexSet(integer: sectionIndex), with: .automatic)
+        case .move:
+            self.tableViewToWorkWith.deleteSections(IndexSet(integer: sectionIndex), with: .automatic)
+            self.tableViewToWorkWith.insertSections(IndexSet(integer: sectionIndex), with: .automatic)
+        case .delete:
+            self.tableViewToWorkWith.deleteSections(IndexSet(integer: sectionIndex), with: .automatic)
+        default :
+            return
+        }
+    }
 }
-
 

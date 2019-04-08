@@ -25,7 +25,7 @@ class ProfileViewPresenter: NSObject, PresenterForProfileViewController {
     }
     init(viewController: ProfileViewController) {
         self.viewControlerToWorkWith = viewController
-        guard let userProfile = StorageManager.singleton.findFirst(in: .mainContext, aModel: User.self) else {fatalError("MainUser hasn't been created or loaded")}
+        guard let userProfile = StorageManager.singleton.findLast(in: .mainContext, aModel: User.self) else {fatalError("MainUser hasn't been created or loaded")}
         self.mainUserProfile = userProfile
     }
     

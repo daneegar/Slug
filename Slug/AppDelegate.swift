@@ -76,7 +76,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - Core Data Saving support
 
     func saveContext () {
-        let context = persistentContainer.viewContext
+        let context = StorageManager.singleton.coreDataStack.contex(contextType: .mainContext)
+        StorageManager.singleton.findAll(ofType: User.self, in: .mainContext, byPropertyName: "id", withMatch: nil) { (users) in
+            if let users = users {
+                for user in users {
+                    user.isOnline = false
+                }
+            }
+            return nil
+        }
         if context.hasChanges {
             do {
                 try context.save()

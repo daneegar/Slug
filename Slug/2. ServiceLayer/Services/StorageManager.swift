@@ -24,26 +24,30 @@ class StorageManager {
         }
     }
 
-    func insert<T: NSManagedObject>(in contextType: ContextType, aModel model: T.Type) -> T? {
+    func insert<T: NSManagedObject>(in contextType: ContextType, aModel model: T.Type, complition: ((T?) -> Void)?){
         
         let context = self.coreDataStack.contex(contextType: contextType)
         var someData: T?
         context.performAndWait {
             someData = NSEntityDescription.insertNewObject(forEntityName: model.entity().name!, into: context) as? T
+            complition?(someData)
         }
-        return someData
     }
     
-    func findOrInsert<T: NSManagedObject>(in contextType: ContextType, aModel model: T.Type) -> T? {
+    func findOrInsert<T: NSManagedObject>(in contextType: ContextType, aModel model: T.Type, complition: ((T?) -> Void)?) {
         var entiti: T?
         let context = self.coreDataStack.contex(contextType: contextType)
         context.performAndWait {
             entiti = findFirst(in: contextType, aModel: T.self)
             if entiti == nil {
-                entiti = self.insert(in: contextType, aModel: T.self)
+                self.insert(in: contextType, aModel: model, complition: { (data) in
+                    complition?(data)
+                })
+            }
+            else {
+                complition?(entiti)
             }
         }
-        return entiti
     }
     
     func findFirst<T: NSManagedObject>(in contextType: ContextType, aModel entiti: T.Type) -> T? {
@@ -91,15 +95,15 @@ class StorageManager {
         return blanc
     }
     
-    func findAll<T: NSManagedObject>(ofType type: T.Type, in contextType: ContextType, byPropertyName name: String?, withMatch match: String?) -> [T]? {
+    func findAll<T: NSManagedObject>(ofType type: T.Type, in contextType: ContextType, byPropertyName name: String?, withMatch match: String?, complition: (([T]?) -> Void?)?){
         let context = self.coreDataStack.contex(contextType: contextType)
         guard let model = context.persistentStoreCoordinator?.managedObjectModel else {
             print("Problem with modeling \(#function)")
-            return nil
+            return
         }
         guard let fetchRequest = self.fetchRequestGeneral(model: model, forEntiti: type) else {
             print("Fetch request hasn't been created \(#function)")
-            return nil
+            return
         }
         if let nameToPredicate = name, let matchToPredicate = match {
             let predicate: NSPredicate? = NSPredicate(format: "\(nameToPredicate) == %@", matchToPredicate)
@@ -110,11 +114,13 @@ class StorageManager {
             do {
                 let result = try context.fetch(fetchRequest)
                 blanc = result
+                
+                try context.save()
             } catch {
                 print("Fetch request in context done with error in \(#function)")
             }
+            complition?(blanc)
         }
-        return blanc
     }
     
     private func fetchRequestGeneral<T: NSManagedObject>(model: NSManagedObjectModel, forEntiti entiti: T.Type) ->NSFetchRequest<T>? {
