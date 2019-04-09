@@ -12,9 +12,12 @@ import CoreData.NSFetchedResultsController
 
 protocol PresenterForConversationViewController: UITableViewDataSource{
     func sendMessage(text: String?)
+    func viewWillHide()
 }
 
-class ConversationPresenter: NSObject, PresenterForConversationViewController, CommunicationManagerInjector{
+class ConversationPresenter: NSObject, PresenterForConversationViewController, CommunicationManagerInjector, BackgroundTasksInjector {
+    
+    
 
     private weak var uiNavigationViewControllerToWorkWith: UINavigationController!
     private weak var uiViewControllerToWorkWith: UIViewController!
@@ -33,16 +36,26 @@ class ConversationPresenter: NSObject, PresenterForConversationViewController, C
             self.uiViewControllerToWorkWith = uivc
             self.tableViewToWorkWith = tv
         }
+        
         else {fatalError("There is no some components in ViewController")}
         super.init()
         self.tableViewToWorkWith.dataSource = self
         guard let id = self.conversation.id else {fatalError("conversation Id hasn't been unwrapped \(#function)")}
         self.frc = FRCManager.frcForMessages(delegate: self, forConversationId: id)
         self.performFetch()
+        self.uiViewControllerToWorkWith.title = self.conversation.user?.name
+        
     }
     
     func sendMessage(text: String?) {
         self.communicationManager.send(theMessage: text, inConversation: self.conversation)
+    }
+    
+    func viewWillHide() {
+        self.backgroundTask.resetUnreadedStatus(forConversation: self.conversation)
+    }
+    private func resetStatusHasUnreadedMessaged() {
+
     }
     
     private func performFetch() {
@@ -69,25 +82,17 @@ extension ConversationPresenter: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let message = self.frc?.object(at: indexPath)
-        let typeOfMessge: MessageType = message!.isOutgoing ? .outGoingMessage : .inComingMessage
+        guard let message = self.frc?.object(at: indexPath) else {fatalError()}
+        let typeOfMessge: MessageType = message.isOutgoing ? .outGoingMessage : .inComingMessage
         guard let cellConcept = self.tableViewToWorkWith.dequeueReusableCell(
             withIdentifier: typeOfMessge.rawValue) as? MessageCell
             else {return UITableViewCell()}
-        cellConcept.setupCell(whithText: message!.text, andTypeOf: typeOfMessge)
+        cellConcept.setupCell(whithText: message.text, andTypeOf: typeOfMessge)
+        cellConcept.contentView.transform = CGAffineTransform(scaleX: 1, y: -1)
         return cellConcept
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        guard let sectionInfo = self.frc?.sections?[section] else {
-            return nil
-        }
-        let title: String
-        if sectionInfo.name == "0" {
-            title = "Offline"
-        } else {
-            title = "Online"
-        }
         return nil
     }
     

@@ -26,7 +26,7 @@ class ConversationListPresenter: NSObject, PresenterForConversationList, Communi
     private weak var uiNavigationViewControllerToWorkWith: UINavigationController!
     private weak var uiViewControllerToWorkWith: UIViewController!
     private weak var tableViewToWorkWith: UITableView!
-    var frc: NSFetchedResultsController<User>?
+    var frc: NSFetchedResultsController<Conversation>?
     var mainUser: MainUser? {
         willSet {
             if let value = newValue {
@@ -54,19 +54,16 @@ class ConversationListPresenter: NSObject, PresenterForConversationList, Communi
     
     func showView(forItem indexPath: IndexPath, presentType: PresentType) {
         guard let conversationViewController = self.uiViewControllerToWorkWith.storyboard?.instantiateViewController(withIdentifier: "conversationViewController") as? ConversationViewControllerProtocol else {return}
-        guard let user = self.frc?.object(at: indexPath) else {
+        guard let conversation = self.frc?.object(at: indexPath) else {
             print("there is know user in indexPath \(indexPath)")
             return
         }
-        if let conversation = user.conversation {
-            conversationViewController.initConversation(conversation: conversation)
-            self.uiNavigationViewControllerToWorkWith.pushViewController(conversationViewController, animated: true)
-            return
-        }
+        conversationViewController.initConversation(conversation: conversation)
+        self.uiNavigationViewControllerToWorkWith.pushViewController(conversationViewController, animated: true)
     }
     
     func switcherWasToggled(isOn: Bool) {
-        
+        self.communicationManager.begin(ifTrueAdvertisingFalseBrowsing: isOn)
     }
     
     private func findOrInitTheMainUser(){
@@ -86,7 +83,6 @@ class ConversationListPresenter: NSObject, PresenterForConversationList, Communi
             print("Communication manager cann't be configured without name or id of Main User")
             return
         }
-        self.communicationManager.beginAdvertising(browsingIsOn: true)
     }
     
     private func performFetch() {
@@ -119,8 +115,17 @@ extension ConversationListPresenter: UITableViewDataSource {
             else {
                 return UITableViewCell()
         }
-        if let user = self.frc?.object(at: indexPath) {
-            cell.configProperies(withChatModel: user)
+        if let conversation = self.frc?.object(at: indexPath) {
+            StorageManager.singleton.findAll(ofType: Message.self, in: .mainContext, byPropertyName: "conversation.id", withMatch: conversation.id) { (message) -> Void? in
+                guard var messages = message else {fatalError()}
+                messages.sort(by: { (msg1, msg2) -> Bool in
+                    guard let dateOfMsg1 = msg1.createTimeStamp else {return true}
+                    guard let dateOfMsg2 = msg2.createTimeStamp else {return false}
+                    return dateOfMsg1 < dateOfMsg2
+                    })
+                cell.configProperies(withChatModel: conversation, withLastMessage: messages.last)
+                return nil
+                }
         }
         cell.accessoryType = .disclosureIndicator
         return cell
@@ -131,7 +136,7 @@ extension ConversationListPresenter: UITableViewDataSource {
             return nil
         }
         let title: String
-        if sectionInfo.name == "0" {
+        if sectionInfo.name == "1" {
             title = "Offline"
         } else {
             title = "Online"
@@ -160,14 +165,14 @@ extension ConversationListPresenter: NSFetchedResultsControllerDelegate {
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         switch type {
         case .insert:
-            self.tableViewToWorkWith.insertRows(at: [newIndexPath!], with: .automatic)
-        case .move:
-            self.tableViewToWorkWith.deleteRows(at: [indexPath!], with: .automatic)
-            self.tableViewToWorkWith.insertRows(at: [newIndexPath!], with: .automatic)
-        case .update:
-            self.tableViewToWorkWith.reloadRows(at: [indexPath!], with: .automatic)
+            self.tableViewToWorkWith.insertRows(at: [newIndexPath!], with: .fade)
         case .delete:
-            self.tableViewToWorkWith.deleteRows(at: [indexPath!], with: .automatic)
+            self.tableViewToWorkWith.deleteRows(at: [indexPath!], with: .fade)
+        case .update:
+            self.tableViewToWorkWith.reloadRows(at: [indexPath!], with: .fade)
+        case .move:
+            self.tableViewToWorkWith.insertRows(at: [newIndexPath!], with: .fade)
+            self.tableViewToWorkWith.deleteRows(at: [indexPath!], with: .fade)
         @unknown default:
             print("FetchResultController back the uknowed Change type")
         }
@@ -176,9 +181,6 @@ extension ConversationListPresenter: NSFetchedResultsControllerDelegate {
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
         switch type {
         case .insert:
-            self.tableViewToWorkWith.insertSections(IndexSet(integer: sectionIndex), with: .automatic)
-        case .move:
-            self.tableViewToWorkWith.deleteSections(IndexSet(integer: sectionIndex), with: .automatic)
             self.tableViewToWorkWith.insertSections(IndexSet(integer: sectionIndex), with: .automatic)
         case .delete:
             self.tableViewToWorkWith.deleteSections(IndexSet(integer: sectionIndex), with: .automatic)

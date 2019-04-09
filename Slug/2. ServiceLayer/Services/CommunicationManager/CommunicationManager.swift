@@ -12,7 +12,7 @@ import CoreData
 protocol CommunicatorManagerSenderBrowsingAdvertising {
     func send(theMessage message: String?, inConversation conv: Conversation)
     func set(userID: String, userName: String)
-    func beginAdvertising(browsingIsOn browsing: Bool)
+    func begin(ifTrueAdvertisingFalseBrowsing mode: Bool)
 }
 
 protocol CommunicationManagerInjector {
@@ -34,17 +34,7 @@ class CommunicationManager: CommunicatorDelegate {
     var nameOfUser: String?
     init() {
     }
-    func beginAdvertising(browsingIsOn browsingModeOn: Bool) {
-        guard let peerId = self.peerID else {
-            print("\(#function) can't be execute because peedID doesnt configure")
-            return
-        }
-        guard let nameOfUser = self.nameOfUser else {
-            print("\(#function) can't be execute because name doesnt configure")
-            return
-        }
-        self.communicator = MultipeerCommunicator(peerId, nameOfUser, self)
-    }
+
     
     func didFoundUser(userID: String, userName: String?) {
         handleUser(userID: userID) { (user) in
@@ -55,13 +45,14 @@ class CommunicationManager: CommunicatorDelegate {
             if user.name != userName {
                 user.name = userName
             }
-            user.isOnline = true
+            user.conversation?.isOffline = false
             if let _ = user.conversation {
                 
             } else {
                 self.createConversation(complition: { (conv) in
                     guard let conv = conv else {fatalError("Conversatoin hasn't been finded os insered")}
                     conv.id = user.id
+                    conv.isOffline = false
                     user.conversation = conv
                 })
             }
@@ -70,7 +61,7 @@ class CommunicationManager: CommunicatorDelegate {
     
     func didLostUser(userID: String) {
         self.handleUser(userID: userID) { (user) in
-            user?.isOnline = false
+            user?.conversation?.isOffline = true
         }
     }
     
@@ -103,7 +94,8 @@ class CommunicationManager: CommunicatorDelegate {
                         createdMessage.id = messageId
                         createdMessage.isOutgoing = false
                         createdMessage.createTimeStamp = Date()
-                        users.first?.conversation?.addToMessages(createdMessage)
+                        createdMessage.isUnreaded = true
+                        self.addMessageToConv(theMessage: createdMessage, inConversation: users.first!.conversation!)
                     })
                     
                 })
@@ -114,11 +106,23 @@ class CommunicationManager: CommunicatorDelegate {
 }
 
 extension CommunicationManager: CommunicatorManagerSenderBrowsingAdvertising {
+    func begin(ifTrueAdvertisingFalseBrowsing browsing: Bool) {
+        guard let peerId = self.peerID else {
+            print("\(#function) can't be execute because peedID doesnt configure")
+            return
+        }
+        guard let nameOfUser = self.nameOfUser else {
+            print("\(#function) can't be execute because name doesnt configure")
+            return
+        }
+        self.communicator = MultipeerCommunicator(peerId, nameOfUser, self, browsing)
+    }
+    
     func set(userID: String, userName: String) {
         self.peerID = userID
         self.nameOfUser = userName
-        if self.communicator != nil {
-            self.communicator = MultipeerCommunicator(userID, userName, self)
+        if self.communicator == nil {
+            self.communicator = MultipeerCommunicator(userID, userName, self, true)
         }
     }
     
@@ -157,13 +161,7 @@ extension CommunicationManager: CommunicatorManagerSenderBrowsingAdvertising {
             }
         }
     }
-    func addMessageToConv(theMessage msg: Message, inConversation conv: Conversation) {
-        StorageManager.singleton.findAll(ofType: Conversation.self, in: .saveContext, byPropertyName: "id", withMatch: conv.id) { (conv) -> Void? in
-            guard let converasation = conv?.first else {fatalError()}
-            converasation.addToMessages(msg)
-            return nil
-        }
-    }
+
 }
 
 extension CommunicationManager {
@@ -194,9 +192,18 @@ extension CommunicationManager {
             } else {
                 blanc = findedUsers.first!
                 complition(blanc)
-                StorageManager.singleton.storeData(inTypeOfContext: .saveContext, complition: {})
             }
         })
+    }
+    
+    func addMessageToConv(theMessage msg: Message, inConversation conv: Conversation) {
+        StorageManager.singleton.findAll(ofType: Conversation.self, in: .saveContext, byPropertyName: "id", withMatch: conv.id) { (conv) -> Void? in
+            guard let converasation = conv?.first else {fatalError()}
+            converasation.addToMessages(msg)
+            converasation.dateOfLastMessage = msg.createTimeStamp
+            if !msg.isOutgoing { converasation.hasUnreadedMessages = true }
+            return nil
+        }
     }
     
     private func createMessage(complition: @escaping (Message?) -> Void) {

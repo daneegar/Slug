@@ -41,6 +41,7 @@
 		92BCB911225644DB0042261F /* ServicesAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BCB910225644DB0042261F /* ServicesAssembly.swift */; };
 		92BCB913225644F40042261F /* CoreAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BCB912225644F40042261F /* CoreAssembly.swift */; };
 		92BCB915225645EA0042261F /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 92BCB914225645EA0042261F /* Default-568h@2x.png */; };
+		92E48CCB225D401700337357 /* BackgroundStorageTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E48CCA225D401700337357 /* BackgroundStorageTasks.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -80,6 +81,7 @@
 		92BCB910225644DB0042261F /* ServicesAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesAssembly.swift; sourceTree = "<group>"; };
 		92BCB912225644F40042261F /* CoreAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreAssembly.swift; sourceTree = "<group>"; };
 		92BCB914225645EA0042261F /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		92E48CCA225D401700337357 /* BackgroundStorageTasks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundStorageTasks.swift; sourceTree = "<group>"; };
 		E5590BC8A591E781B965EB55 /* Pods-Slug.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Slug.debug.xcconfig"; path = "Target Support Files/Pods-Slug/Pods-Slug.debug.xcconfig"; sourceTree = "<group>"; };
 		ED70F609EB3CB86DED8C8CC7 /* Pods_Slug.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Slug.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -228,6 +230,7 @@
 				923B41462256972100BFBB5E /* DatesHandler.swift */,
 				923B414A2256983B00BFBB5E /* StorageManager.swift */,
 				923B416B22593A3700BFBB5E /* FRCManager.swift */,
+				92E48CCA225D401700337357 /* BackgroundStorageTasks.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -423,6 +426,7 @@
 				92BCB8EC22563FF70042261F /* AppDelegate.swift in Sources */,
 				923B41432256964900BFBB5E /* ConversationListViewController.swift in Sources */,
 				923B415822569A9E00BFBB5E /* MessageCell.swift in Sources */,
+				92E48CCB225D401700337357 /* BackgroundStorageTasks.swift in Sources */,
 				923B41412256964100BFBB5E /* ProfileViewController.swift in Sources */,
 				923B413A22567E7000BFBB5E /* CoreDataStack.swift in Sources */,
 				923B414B2256983B00BFBB5E /* StorageManager.swift in Sources */,

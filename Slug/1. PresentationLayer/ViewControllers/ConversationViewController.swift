@@ -29,6 +29,7 @@ class ConversationViewController: UIViewController {
     var conversation: Conversation!
     @IBAction func sendButtonPressed(_ sender: Any) {
         presenter.sendMessage(text: self.textMessageView.text)
+        self.textMessageView.text = ""
     }
     @IBOutlet weak var converstaionTableView: UITableView!
     override func viewDidLoad() {
@@ -45,6 +46,7 @@ class ConversationViewController: UIViewController {
         self.textMessageView.textContainer.heightTracksTextView = true
         self.textMessageView.endFloatingCursor()
         self.textMessageView.textColor = UIColor.lightGray
+        self.converstaionTableView.transform = CGAffineTransform(scaleX: 1, y: -1)
         self.textMessageView.selectedTextRange = textMessageView.textRange(from: textMessageView.beginningOfDocument,
                                                                            to: textMessageView.beginningOfDocument)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow),
@@ -52,20 +54,8 @@ class ConversationViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide),
                                                name: UIResponder.keyboardWillHideNotification, object: nil)
     }
-    // MARK: - lets test ConversationViewController
-    func richConversation() {
-//        for _ in 0...3 {
-//            self.conversation.append(MessageStruct(messageID: "undefined",
-//                                                   text: RandomData.randomString(length: 50),
-//                                                   typeOfMessage: .inComingMessage))
-//            self.conversation.append(MessageStruct(messageID: "undefined",
-//                                                   text: RandomData.randomString(length: 30),
-//                                                   typeOfMessage: .outGoingMessage))
-//        }
-    }
-    
     override func viewWillDisappear(_ animated: Bool) {
-
+        presenter.viewWillHide()
     }
 }
 

@@ -26,7 +26,7 @@ protocol Communicator {
     func send(aMessage jsonData: Data, toUserId userID: String, whitUserName userNname: String,
                      complitionHandler : ((_ success: Bool, _ error: Error?) -> Void)?)
     var delegate: CommunicatorDelegate? {get set}
-    var online: Bool {get set}
+    var ifTrueAdvertisingFalseBrowsing: Bool {get set}
 }
 
 class MultipeerCommunicator: NSObject, Communicator {
@@ -42,9 +42,9 @@ class MultipeerCommunicator: NSObject, Communicator {
 
     weak var delegate: CommunicatorDelegate?
     
-    var online: Bool {
+    var ifTrueAdvertisingFalseBrowsing: Bool {
         didSet {
-            if online {
+            if ifTrueAdvertisingFalseBrowsing {
                 self.serviceBrowser.stopBrowsingForPeers()
                 self.serviceAdvertiser.startAdvertisingPeer()
             } else {
@@ -71,7 +71,7 @@ class MultipeerCommunicator: NSObject, Communicator {
 
     var session: MCSession
 
-    init(_ peerID: String, _ displayName: String, _ delegate: CommunicatorDelegate) {
+    init(_ peerID: String, _ displayName: String, _ delegate: CommunicatorDelegate, _ ifTrueAdvertisingFalseBrowsing: Bool) {
         let encodedPeerId = MultipeerCommunicator.encodePeer(withId: peerID, andName: displayName)
         self.myPeerId = MCPeerID(displayName: encodedPeerId)
         self.discoveryInfo = ["userName": displayName]
@@ -81,7 +81,7 @@ class MultipeerCommunicator: NSObject, Communicator {
         self.serviceBrowser = MCNearbyServiceBrowser(peer: self.myPeerId, serviceType: self.serviceType)
         self.session = MCSession(peer: self.myPeerId, securityIdentity: nil, encryptionPreference: .required)
         self.delegate = delegate
-        self.online = true
+        self.ifTrueAdvertisingFalseBrowsing = ifTrueAdvertisingFalseBrowsing
         super.init()
         self.session.delegate = self
         self.serviceAdvertiser.delegate = self
@@ -150,7 +150,7 @@ extension MultipeerCommunicator: MCNearbyServiceBrowserDelegate {
 extension MultipeerCommunicator: MCSessionDelegate {
 
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-        NSLog("%@", "didReceiveData: \(data)")
+        NSLog("%@",  "didReceiveData: \(data)")
         self.decodePeer(displayName: peerID.displayName) { (id, name) in
             self.delegate?.didRecieve(message: data, fromUser: id)
         }
@@ -188,6 +188,7 @@ extension MultipeerCommunicator: MCSessionDelegate {
             }
         case MCSessionState.connecting:
             self.decodePeer(displayName: peerID.displayName) { (id, name) in
+                self.delegate?.didLostUser(userID: id)
                 print("Connecting: \(name) with id: \(id)")
             }
         case MCSessionState.notConnected:

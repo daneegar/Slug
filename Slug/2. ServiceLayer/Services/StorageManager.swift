@@ -135,8 +135,7 @@ class StorageManager {
     }
     
     func prepareFetchResultController<T: NSManagedObject>(ofType type: T.Type,
-                                        sortedBy property: String?,
-                                        asscending: Bool = false,
+                                        sortedBy sortDesctiptors: [NSSortDescriptor],
                                         in context: ContextType,
                                         withSelector selector: String?,
                                         delegate: NSFetchedResultsControllerDelegate,
@@ -145,8 +144,7 @@ class StorageManager {
         let fetchRequest = type.fetchRequest()
         fetchRequest.fetchOffset = offset
         fetchRequest.predicate = predicate
-        let sortDescriptor: NSSortDescriptor = NSSortDescriptor(key: property, ascending: asscending)
-        fetchRequest.sortDescriptors = [sortDescriptor]
+        fetchRequest.sortDescriptors = sortDesctiptors
         let context = self.coreDataStack.contex(contextType: context)
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: selector, cacheName: nil)
         frc.delegate = delegate

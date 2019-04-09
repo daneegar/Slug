@@ -27,6 +27,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             mainUser.isOnline = true
         }
+        StorageManager.singleton.findAll(ofType: Conversation.self, in: .mainContext, byPropertyName: "id", withMatch: nil) { (findedConvesations) -> Void? in
+            guard let conversations = findedConvesations else {fatalError()}
+            for conv in conversations {
+                conv.isOffline = true
+            }
+            return nil
+        }
         return true
     }
 
