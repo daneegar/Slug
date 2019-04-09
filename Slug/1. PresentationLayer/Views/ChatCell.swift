@@ -32,9 +32,6 @@ class ChatCell: UITableViewCell {
     }
     func configProperies(withChatModel instance: User) {
         self.name = instance.name
-//        if let id = instance.id {
-//            self.message = RequestAndFetchingHandler.fetchLastMessage(byID: id)
-//        }
 //        self.date = self.message?.createTimeStamp
         self.online = instance.isOnline
 //        if let knownState = self.message?.isUnreaded {

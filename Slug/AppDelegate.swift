@@ -16,7 +16,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        StorageManager.singleton.findOrInsert(in: .mainContext, aModel: MainUser.self) { (findedOrCreatedMainUser) in
+            guard let mainUser = findedOrCreatedMainUser else {fatalError("Main user hasn't been created of finded \(#function)")}
+            if !mainUser.wasInit {
+                mainUser.id = RandomData.generateUniqId()
+                mainUser.name = UIDevice.current.name
+                mainUser.avatar = UIImage(named: "placeholder-user")?.jpegData(compressionQuality: 1.0)
+                mainUser.wasInit = true
+                mainUser.aboutInfirmation = "Type something about you!"
+            }
+            mainUser.isOnline = true
+        }
         return true
     }
 

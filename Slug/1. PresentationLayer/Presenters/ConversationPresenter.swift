@@ -14,18 +14,20 @@ protocol PresenterForConversationViewController: UITableViewDataSource{
     func sendMessage(text: String?)
 }
 
-class ConversationPresenter: NSObject, PresenterForConversationViewController{
+class ConversationPresenter: NSObject, PresenterForConversationViewController, CommunicationManagerInjector{
 
     private weak var uiNavigationViewControllerToWorkWith: UINavigationController!
     private weak var uiViewControllerToWorkWith: UIViewController!
     private weak var tableViewToWorkWith: UITableView!
     private var frc: NSFetchedResultsController<Message>?
+    private var conversation: Conversation
 
 
     init (uiNavigationController: UINavigationController?,
           uiViewController: UIViewController?,
           tableView: UITableView?,
           conversation: Conversation) {
+        self.conversation = conversation
         if let unc = uiNavigationController, let uivc = uiViewController, let tv = tableView {
             self.uiNavigationViewControllerToWorkWith = unc
             self.uiViewControllerToWorkWith = uivc
@@ -34,12 +36,21 @@ class ConversationPresenter: NSObject, PresenterForConversationViewController{
         else {fatalError("There is no some components in ViewController")}
         super.init()
         self.tableViewToWorkWith.dataSource = self
-        guard let id = conversation.id else {fatalError("conversation Id hasn't been unwrapped \(#function)")}
+        guard let id = self.conversation.id else {fatalError("conversation Id hasn't been unwrapped \(#function)")}
         self.frc = FRCManager.frcForMessages(delegate: self, forConversationId: id)
+        self.performFetch()
     }
     
     func sendMessage(text: String?) {
-        
+        self.communicationManager.send(theMessage: text, inConversation: self.conversation)
+    }
+    
+    private func performFetch() {
+        do {
+            try frc?.performFetch()
+        } catch {
+            print("perform Fetching FRC done with errors")
+        }
     }
 }
 
@@ -77,7 +88,7 @@ extension ConversationPresenter: UITableViewDataSource {
         } else {
             title = "Online"
         }
-        return title
+        return nil
     }
     
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {

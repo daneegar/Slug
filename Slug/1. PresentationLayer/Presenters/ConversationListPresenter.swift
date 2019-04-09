@@ -26,9 +26,8 @@ class ConversationListPresenter: NSObject, PresenterForConversationList, Communi
     private weak var uiNavigationViewControllerToWorkWith: UINavigationController!
     private weak var uiViewControllerToWorkWith: UIViewController!
     private weak var tableViewToWorkWith: UITableView!
-    var sectionIndexTitles = ["Online", "Offline"]
     var frc: NSFetchedResultsController<User>?
-    var mainUser: User? {
+    var mainUser: MainUser? {
         willSet {
             if let value = newValue {
                 self.configCommunicationManager(withMain: value)
@@ -71,29 +70,16 @@ class ConversationListPresenter: NSObject, PresenterForConversationList, Communi
     }
     
     private func findOrInitTheMainUser(){
-        StorageManager.singleton.findOrInsert(in: .mainContext, aModel: User.self, complition: {(savedOrCreatedUser) in
-            var isInititiate: Bool = false
+        StorageManager.singleton.findOrInsert(in: .mainContext, aModel: MainUser.self, complition: {(savedOrCreatedUser) in
             guard let user = savedOrCreatedUser else {fatalError("Main User hasn't been created or founded")}
-            if user.name == nil {
-                user.name = "unNamed"
-                isInititiate = true
-            }
-            if user.id == nil {
-                user.generateId()
-                isInititiate = true
-            }
-            if user.avatar == nil {
-                user.avatar = UIImage(named: "placeholder-user")?.jpegData(compressionQuality: 1.0)
-                isInititiate = true
-            }
-            user.isOnline = true
             self.mainUser = user
-            self.frc = FRCManager.createFrcForConversationListViewController(delegate: self)
-            self.performFetch()
+            
         })
+        self.frc = FRCManager.createFrcForConversationListViewController(delegate: self)
+        self.performFetch()
     }
     
-    private func configCommunicationManager(withMain user: User) {
+    private func configCommunicationManager(withMain user: MainUser) {
         if let id = user.id, let name = user.name {
             self.communicationManager.set(userID: id, userName: name)
         } else {
@@ -186,11 +172,6 @@ extension ConversationListPresenter: NSFetchedResultsControllerDelegate {
             print("FetchResultController back the uknowed Change type")
         }
     }
-    func sectionIndexTitle(forSectionName sectionName: String) -> String? {
-        print("\(#function)")
-        return nil
-    }
-    
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType) {
         switch type {

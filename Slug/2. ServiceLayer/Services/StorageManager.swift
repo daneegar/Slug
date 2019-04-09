@@ -114,12 +114,13 @@ class StorageManager {
             do {
                 let result = try context.fetch(fetchRequest)
                 blanc = result
-                
-                try context.save()
+                complition?(blanc)
             } catch {
                 print("Fetch request in context done with error in \(#function)")
             }
-            complition?(blanc)
+            self.storeData(inTypeOfContext: contextType, complition: {
+                
+            })
         }
     }
     

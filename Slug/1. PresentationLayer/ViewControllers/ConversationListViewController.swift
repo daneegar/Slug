@@ -45,5 +45,4 @@ extension ConversationListViewController: UITableViewDelegate {
         self.presenterUnwraped.showView(forItem: indexPath, presentType: .pushInNavigationStack)
         self.tableViewOfChats.deselectRow(at: indexPath, animated: true)
     }
-    
 }

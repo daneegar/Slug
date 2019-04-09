@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 
 protocol CommunicatorManagerSenderBrowsingAdvertising {
-    func send(theMessage message: Message, toUser: User)
+    func send(theMessage message: String?, inConversation conv: Conversation)
     func set(userID: String, userName: String)
     func beginAdvertising(browsingIsOn browsing: Bool)
 }
@@ -56,11 +56,15 @@ class CommunicationManager: CommunicatorDelegate {
                 user.name = userName
             }
             user.isOnline = true
-            self.createConversation(complition: { (conv) in
-                guard let conv = conv else {fatalError("Conversatoin hasn't been finded os insered")}
-                user.conversation = conv
-            })
-            
+            if let _ = user.conversation {
+                
+            } else {
+                self.createConversation(complition: { (conv) in
+                    guard let conv = conv else {fatalError("Conversatoin hasn't been finded os insered")}
+                    conv.id = user.id
+                    user.conversation = conv
+                })
+            }
         }
     }
     
@@ -87,7 +91,7 @@ class CommunicationManager: CommunicatorDelegate {
             print("Decoding finished with errors \(#function)")
             return
         }
-        StorageManager.singleton.findAll(ofType: User.self, in: .saveContext, byPropertyName: "name", withMatch: fromUser, complition: { (findedUsers) in
+        StorageManager.singleton.findAll(ofType: User.self, in: .saveContext, byPropertyName: "id", withMatch: fromUser, complition: { (findedUsers) in
             guard let users = findedUsers else {fatalError("Fatal error in \(#function)")}
             if users.count != 1 {
                 print("users founded by name = \(users.count)")
@@ -97,6 +101,8 @@ class CommunicationManager: CommunicatorDelegate {
                         guard let createdMessage = message else {fatalError("messege hasn't been created \(#function)")}
                         createdMessage.text = text
                         createdMessage.id = messageId
+                        createdMessage.isOutgoing = false
+                        createdMessage.createTimeStamp = Date()
                         users.first?.conversation?.addToMessages(createdMessage)
                     })
                     
@@ -116,25 +122,46 @@ extension CommunicationManager: CommunicatorManagerSenderBrowsingAdvertising {
         }
     }
     
-    func send(theMessage message: Message, toUser: User) {
-        let messageStruct = MessageStruct(from: message, eventType: "TextMessage")
-        var data = Data()
-        do {
-            try data = JSONEncoder().encode(messageStruct)
-        } catch {
-            print(error)
-            return
-        }
-        guard let userName = toUser.name else {
-            print("Name of user hasn't been unwrapped \(#function)")
-            return
-        }
-        guard let communicator_ = self.communicator else { fatalError("\(#function) was ended with error")}
-        communicator_.send(aMessage: data, toUserId: userName) { (status, error) in
-            print(status)
-            print(error.debugDescription)
-            //TODO: - make save to DB, if sending ended corrected
+    func send(theMessage message: String?, inConversation conv: Conversation) {
+        self.createMessage { (newMessage) in
+            guard let newMsg = newMessage else {fatalError()}
+            newMsg.text = message
+            newMsg.id = RandomData.generateUniqId()
+            newMsg.createTimeStamp = Date()
+            newMsg.isOutgoing = true
             
+            let messageStruct = MessageStruct(from: newMsg, eventType: "TextMessage")
+            var data = Data()
+            do {
+                try data = JSONEncoder().encode(messageStruct)
+            } catch {
+                print(error)
+                return
+            }
+            guard let userId = conv.user?.id else {
+                print("id of user hasn't been unwrapped \(#function)")
+                return
+            }
+            guard let userName = conv.user?.name else {
+                print("Name of user hasn't been unwrapped \(#function)")
+                return
+            }
+            guard let communicator_ = self.communicator else { fatalError("\(#function) was ended with error")}
+            communicator_.send(aMessage: data, toUserId: userId, whitUserName: userName) { (messageSended, error) in
+                if messageSended {
+                    DispatchQueue.main.async {
+                        self.addMessageToConv(theMessage: newMsg, inConversation: conv)
+                    }
+                }
+                print(error.debugDescription)
+            }
+        }
+    }
+    func addMessageToConv(theMessage msg: Message, inConversation conv: Conversation) {
+        StorageManager.singleton.findAll(ofType: Conversation.self, in: .saveContext, byPropertyName: "id", withMatch: conv.id) { (conv) -> Void? in
+            guard let converasation = conv?.first else {fatalError()}
+            converasation.addToMessages(msg)
+            return nil
         }
     }
 }

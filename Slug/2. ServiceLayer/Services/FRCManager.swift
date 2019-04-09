@@ -15,7 +15,7 @@ class FRCManager {
                                                                      sortedBy: "id",
                                                                      asscending: true,
                                                                      in: .mainContext,
-                                                                     withSelector: "isOnline",
+                                                                     withSelector: nil,
                                                                      delegate: delegate,
                                                                      predicate: nil,
                                                                      offset: 0)

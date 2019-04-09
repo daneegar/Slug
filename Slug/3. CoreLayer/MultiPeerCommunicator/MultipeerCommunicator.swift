@@ -23,7 +23,7 @@ protocol  CommunicatorDelegate: class {
 }
 
 protocol Communicator {
-    func send(aMessage jsonData: Data, toUserId userID: String,
+    func send(aMessage jsonData: Data, toUserId userID: String, whitUserName userNname: String,
                      complitionHandler : ((_ success: Bool, _ error: Error?) -> Void)?)
     var delegate: CommunicatorDelegate? {get set}
     var online: Bool {get set}
@@ -53,20 +53,26 @@ class MultipeerCommunicator: NSObject, Communicator {
             }
         }
     }
-    func send(aMessage jsonData: Data, toUserId userID: String, complitionHandler: ((Bool, Error?) -> Void)?) {
+    func send(aMessage jsonData: Data, toUserId userID: String, whitUserName userNname: String, complitionHandler: ((Bool, Error?) -> Void)?) {
+        let displayName = MultipeerCommunicator.encodePeer(withId: userID, andName: userNname)
         do {
-            for peer in self.session.connectedPeers where peer.displayName == userID {
+            for peer in self.session.connectedPeers where peer.displayName == displayName {
                 try self.session.send(jsonData, toPeers: [peer], with: .reliable)
+                complitionHandler?(true, nil)
+                return
             }
         } catch {
             print(error)
+            complitionHandler?(false, error)
+            return
         }
+        complitionHandler?(false, nil)
     }
 
     var session: MCSession
 
     init(_ peerID: String, _ displayName: String, _ delegate: CommunicatorDelegate) {
-        let encodedPeerId = MultipeerCommunicator.encodePeer(withName: peerID, andName: displayName)
+        let encodedPeerId = MultipeerCommunicator.encodePeer(withId: peerID, andName: displayName)
         self.myPeerId = MCPeerID(displayName: encodedPeerId)
         self.discoveryInfo = ["userName": displayName]
         self.serviceAdvertiser = MCNearbyServiceAdvertiser(peer: self.myPeerId,
@@ -84,7 +90,7 @@ class MultipeerCommunicator: NSObject, Communicator {
         self.serviceBrowser.startBrowsingForPeers()
     }
     
-    static private func encodePeer(withName id: String, andName name: String) -> String {
+    static private func encodePeer(withId id: String, andName name: String) -> String {
         var codedPeerID: String = String()
         codedPeerID.append(id)
         codedPeerID.append("&")
@@ -145,11 +151,9 @@ extension MultipeerCommunicator: MCSessionDelegate {
 
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
         NSLog("%@", "didReceiveData: \(data)")
-//        let decoder = JSONDecoder()
-//        do {
-//            //let message = try decoder.decode(MessageStruct.self, from: data)
-//            //self.delegate?.didRecieveMessage(text: message, fromUser: peerID.displayName, toUser: "")
-//        } catch {print("date ComesLike Shit")}
+        self.decodePeer(displayName: peerID.displayName) { (id, name) in
+            self.delegate?.didRecieve(message: data, fromUser: id)
+        }
     }
 
     func session(_ session: MCSession,
