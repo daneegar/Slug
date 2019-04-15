@@ -13,7 +13,7 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var rootAssembly: RootAssembly = RootAssembly()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         StorageManager.singleton.findOrInsert(in: .mainContext, aModel: MainUser.self) { (findedOrCreatedMainUser) in
@@ -34,6 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             return nil
         }
+        rootAssembly.presentationAssembly.initSession()
         return true
     }
 

@@ -7,18 +7,17 @@
 //
 
 import UIKit
-protocol TakeImageDelegate: class {
-    func pickTaken(image takenImage: UIImage)
-}
 
 protocol MainUserProfileView: UIViewController {
     func profileLoaded(name: String, informationAbout: String, profilePhoto: UIImage?)
-    func show(allert: UIAlertAction)
+    func updateProfilePhoto(whitImage image: UIImage)
+    func show(allert: UIAlertController)
+    var presenter: PresenterForProfileViewController? {get set}
 }
 
-class ProfileViewController: UIViewController, UINavigationControllerDelegate, TakeImageDelegate {
+class ProfileViewController: UIViewController, UINavigationControllerDelegate {
     var presenter: PresenterForProfileViewController?
-    var cameraHandler = CameraHandler()
+    
     var keyboardHeight: CGFloat!
     var activeField: UITextView?
     let activityIndicator = UIActivityIndicatorView(style: .gray)
@@ -37,8 +36,8 @@ class ProfileViewController: UIViewController, UINavigationControllerDelegate, T
     @IBOutlet weak var constraintContenViewHeight: NSLayoutConstraint!
     @IBOutlet weak var buttinViewBottom: NSLayoutConstraint!
     @IBAction func addPhoto(_ sender: Any) {
-        print("Выбери изображение профиля")
-        self.cameraHandler.showActionSheet(vController: self)
+        guard let presenter = self.presenter else {fatalError()}
+        presenter.addPictureButtonPressed()
     }
     @IBAction func editingModeButtonPressed(_ sender: Any) {
         if self.editingModeOn {
@@ -61,7 +60,6 @@ class ProfileViewController: UIViewController, UINavigationControllerDelegate, T
 
     }
     override func viewDidLoad() {
-        self.presenter = ProfileViewPresenter(viewController: self)
         self.presenter?.viewControllerDidLoad()
         self.contentScrollView.flashScrollIndicators()
         self.setupDelegates()
@@ -100,11 +98,7 @@ class ProfileViewController: UIViewController, UINavigationControllerDelegate, T
         self.aboutTextView.delegate = self
         self.nameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
     }
-
-    // MARK: - image pinner
-    func pickTaken(image takenImage: UIImage) {
-        self.profilePhoto.image = takenImage
-    }
+    
 }
 // MARK: - editing mode handlers
 extension ProfileViewController: UITextFieldDelegate, UITextViewDelegate {
@@ -193,15 +187,20 @@ extension ProfileViewController: UIImagePickerControllerDelegate {
 }
 
 extension ProfileViewController: MainUserProfileView {
+    func show(allert: UIAlertController) {
+        self.present(allert, animated: true, completion: nil)
+    }
+    
+    func updateProfilePhoto(whitImage image: UIImage) {
+        self.profilePhoto.image = image
+    }
+    
     func profileLoaded(name: String, informationAbout: String, profilePhoto: UIImage?) {
         self.nameTextField.text = name
         self.aboutTextView.text = informationAbout
         self.profilePhoto.image = profilePhoto
     }
     
-    func show(allert: UIAlertAction) {
-        
-    }
 }
 
 

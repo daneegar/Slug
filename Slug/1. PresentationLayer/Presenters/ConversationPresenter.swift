@@ -17,35 +17,24 @@ protocol PresenterForConversationViewController: UITableViewDataSource{
 
 class ConversationPresenter: NSObject, PresenterForConversationViewController, CommunicationManagerInjector, BackgroundTasksInjector {
     
-    
-
-    private weak var uiNavigationViewControllerToWorkWith: UINavigationController!
-    private weak var uiViewControllerToWorkWith: UIViewController!
+    private weak var uiViewControllerToWorkWith: ConversationViewControllerProtocol!
     private weak var tableViewToWorkWith: UITableView!
     private var frc: NSFetchedResultsController<Message>?
     private var conversation: Conversation
-
-
-    init (uiNavigationController: UINavigationController?,
-          uiViewController: UIViewController?,
-          tableView: UITableView?,
-          conversation: Conversation) {
-        self.conversation = conversation
-        if let unc = uiNavigationController, let uivc = uiViewController, let tv = tableView {
-            self.uiNavigationViewControllerToWorkWith = unc
-            self.uiViewControllerToWorkWith = uivc
-            self.tableViewToWorkWith = tv
-        }
-        
-        else {fatalError("There is no some components in ViewController")}
+    
+    init (forViewController vc: ConversationViewControllerProtocol, withConversation conv: Conversation) {
+        self.uiViewControllerToWorkWith = vc
+        self.tableViewToWorkWith = vc.converstaionTableView
+        self.conversation = conv
         super.init()
+        self.uiViewControllerToWorkWith.presenter = self
         self.tableViewToWorkWith.dataSource = self
         guard let id = self.conversation.id else {fatalError("conversation Id hasn't been unwrapped \(#function)")}
         self.frc = FRCManager.frcForMessages(delegate: self, forConversationId: id)
         self.performFetch()
-        self.uiViewControllerToWorkWith.title = self.conversation.user?.name
-        
+        self.tableViewToWorkWith.reloadData()
     }
+    
     
     func sendMessage(text: String?) {
         self.communicationManager.send(theMessage: text, inConversation: self.conversation)

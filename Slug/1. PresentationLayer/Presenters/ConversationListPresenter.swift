@@ -22,10 +22,10 @@ enum PresentType {
 }
 
 class ConversationListPresenter: NSObject, PresenterForConversationList, CommunicationManagerInjector {
-    
-    private weak var uiNavigationViewControllerToWorkWith: UINavigationController!
-    private weak var uiViewControllerToWorkWith: UIViewController!
+
+    private weak var uiViewControllerToWorkWith: ConversationListViewControllerProtocol!
     private weak var tableViewToWorkWith: UITableView!
+    private var presentationAssembly: IPresentationAssembly
     var frc: NSFetchedResultsController<Conversation>?
     var mainUser: MainUser? {
         willSet {
@@ -35,31 +35,27 @@ class ConversationListPresenter: NSObject, PresenterForConversationList, Communi
         }
     }
 
-    init (uiNavigationController: UINavigationController?, uiViewController: UIViewController?, tableView: UITableView?, typesOfItems: NSManagedObject.Type = User.self) {
-        if let unc = uiNavigationController, let uivc = uiViewController, let tv = tableView {
-            self.uiNavigationViewControllerToWorkWith = unc
-            self.uiViewControllerToWorkWith = uivc
-            self.tableViewToWorkWith = tv
-        }
-        else {fatalError("There is no some components in ViewController")}
+    init (forViewController vc: ConversationListViewControllerProtocol, presentationAssembly: IPresentationAssembly) {
+        self.uiViewControllerToWorkWith = vc
+        self.tableViewToWorkWith = vc.tableViewOfChats
+        self.presentationAssembly = presentationAssembly
         super.init()
-        self.tableViewToWorkWith.dataSource = self
+        self.uiViewControllerToWorkWith.presenter = self
+        self.uiViewControllerToWorkWith.tableViewOfChats.dataSource = self
         self.findOrInitTheMainUser()
+        self.tableViewToWorkWith.reloadData()
     }
     
     func presentMainUserView(presentType: PresentType) {
-        guard let profileViewController = uiViewControllerToWorkWith.storyboard?.instantiateViewController(withIdentifier: "mainUserProfile") else {return}
-        uiViewControllerToWorkWith.present(profileViewController, animated: true)
+        self.presentationAssembly.presentProfileMainViewContoller()
     }
     
     func showView(forItem indexPath: IndexPath, presentType: PresentType) {
-        guard let conversationViewController = self.uiViewControllerToWorkWith.storyboard?.instantiateViewController(withIdentifier: "conversationViewController") as? ConversationViewControllerProtocol else {return}
         guard let conversation = self.frc?.object(at: indexPath) else {
             print("there is know user in indexPath \(indexPath)")
             return
         }
-        conversationViewController.initConversation(conversation: conversation)
-        self.uiNavigationViewControllerToWorkWith.pushViewController(conversationViewController, animated: true)
+        self.presentationAssembly.present(conversation: conversation)
     }
     
     func switcherWasToggled(isOn: Bool) {
@@ -84,7 +80,6 @@ class ConversationListPresenter: NSObject, PresenterForConversationList, Communi
             return
         }
     }
-    
     private func performFetch() {
         do {
             try frc?.performFetch()

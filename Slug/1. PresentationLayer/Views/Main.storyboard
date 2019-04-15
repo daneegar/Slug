@@ -92,7 +92,7 @@
         <!--Navigation Controller-->
         <scene sceneID="KzN-pA-F6q">
             <objects>
-                <navigationController id="lCS-E9-P29" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="rootNavigationController" id="lCS-E9-P29" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="hhR-Lo-6z9">
                         <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -103,7 +103,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Mmp-QN-QDv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="559" y="143"/>
+            <point key="canvasLocation" x="446" y="143"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="G45-PR-PtG">
@@ -313,7 +313,7 @@
         <!--Conversation List View Controller-->
         <scene sceneID="j4x-G5-8Ld">
             <objects>
-                <viewController id="yfy-ZF-c2v" customClass="ConversationListViewController" customModule="Slug" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="conversationListViewController" id="yfy-ZF-c2v" customClass="ConversationListViewController" customModule="Slug" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="yio-ED-2hZ">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

@@ -16,7 +16,9 @@ import UIKit
 import MultipeerConnectivity
 
 protocol ConversationViewControllerProtocol: UIViewController {
-    func initConversation(conversation: Conversation)
+    func setTitle(conversationName: String?)
+    var converstaionTableView: UITableView! {get}
+    var presenter: PresenterForConversationViewController! {get set}
 }
 
 class ConversationViewController: UIViewController {
@@ -26,17 +28,17 @@ class ConversationViewController: UIViewController {
     @IBOutlet weak var mainView: UIView!
     var presenter: PresenterForConversationViewController!
     var keyboardIsShown = false
-    var conversation: Conversation!
+//    var conversation: Conversation!
     @IBAction func sendButtonPressed(_ sender: Any) {
         presenter.sendMessage(text: self.textMessageView.text)
         self.textMessageView.text = ""
     }
     @IBOutlet weak var converstaionTableView: UITableView!
     override func viewDidLoad() {
-        self.presenter = ConversationPresenter(uiNavigationController: self.navigationController,
-                                               uiViewController: self,
-                                               tableView: self.converstaionTableView,
-                                               conversation: self.conversation)
+//        self.presenter = ConversationPresenter(uiNavigationController: self.navigationController,
+//                                               uiViewController: self,
+//                                               tableView: self.converstaionTableView,
+//                                               conversation: self.conversation)
         self.converstaionTableView.register(UINib(nibName: "IncomingMessagCell", bundle: nil),
                                             forCellReuseIdentifier: MessageType.inComingMessage.rawValue)
         super.viewDidLoad()
@@ -95,7 +97,7 @@ extension ConversationViewController: UITextViewDelegate {
 }
 
 extension ConversationViewController: ConversationViewControllerProtocol {
-    func initConversation(conversation: Conversation) {
-        self.conversation = conversation
+    func setTitle(conversationName: String?) {
+        self.title = conversationName
     }
 }

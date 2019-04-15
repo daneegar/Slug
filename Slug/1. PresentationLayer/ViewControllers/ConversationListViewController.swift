@@ -10,7 +10,13 @@ import Foundation
 import UIKit
 //import CoreData.NSFetchedResultsController
 
-class ConversationListViewController: UIViewController {
+protocol ConversationListViewControllerProtocol: UIViewController {
+    var tableViewOfChats: UITableView! {get}
+    var presenter: PresenterForConversationList? {get set}
+}
+
+class ConversationListViewController: UIViewController, ConversationListViewControllerProtocol {
+    
     var presenter: PresenterForConversationList?
     lazy var presenterUnwraped: PresenterForConversationList = {
         guard let presenter = self.presenter else {fatalError("Presenter hasn't been unwraped \(#function)")}
@@ -31,11 +37,6 @@ class ConversationListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let presenter = ConversationListPresenter(uiNavigationController: self.navigationController,
-                                                   uiViewController: self,
-                                                   tableView: self.tableViewOfChats,
-                                                   typesOfItems: User.self)
-        self.presenter = presenter
         self.tableViewOfChats.register(UINib(nibName: "ChatCell", bundle: nil), forCellReuseIdentifier: "ChatCell")
         self.navigationItem.title = "Tinkoff Chat"
     }

@@ -9,9 +9,21 @@
 import Foundation
 import UIKit
 
-class CameraHandler: NSObject {
+protocol AddPcitureHandler {
+    func camera()
+    func photoLibrary()
+}
+
+class CameraHandler: NSObject, AddPcitureHandler {
     
-    fileprivate weak var currentVC: UIViewController!
+    private weak var currentVC: UIViewController!
+    private weak var delegate: TakeImageDelegate!
+    
+    init (viewController: UIViewController, delegate: TakeImageDelegate) {
+        self.currentVC = viewController
+        self.delegate = delegate
+        
+    }
 
     func camera() {
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
@@ -38,21 +50,6 @@ class CameraHandler: NSObject {
             self.currentVC.present(alert, animated: true)
         }
     }
-
-    func showActionSheet(vController: UIViewController) {
-        currentVC = vController
-        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-
-        actionSheet.addAction(UIAlertAction(title: "Camera", style: .default, handler: { (_:UIAlertAction!) -> Void in
-            self.camera()
-        }))
-        actionSheet.addAction(UIAlertAction(title: "Gallery", style: .default, handler: { (_:UIAlertAction!) -> Void in
-            self.photoLibrary()
-        }))
-        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        vController.present(actionSheet, animated: true, completion: nil)
-    }
-
 }
 
 extension CameraHandler: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -67,11 +64,7 @@ extension CameraHandler: UIImagePickerControllerDelegate, UINavigationController
             print("Image not found!")
             return
         }
-        guard let viewControllerAsTakingImage = currentVC as? TakeImageDelegate else {
-            print("Conform TakeImageDelegate protocol")
-            return
-        }
-        viewControllerAsTakingImage.pickTaken(image: selectedImage)
+        self.delegate.pickTaken(image: selectedImage)
         currentVC.dismiss(animated: true, completion: nil)
     }
 
