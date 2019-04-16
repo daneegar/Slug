@@ -94,7 +94,7 @@ extension ProfileViewPresenter: TakeImageDelegate {
             self.cameraHandler.photoLibrary()
         }))
         actionSheet.addAction(UIAlertAction(title: "Download", style: .default, handler: { (_:UIAlertAction!) -> Void in
-            self.presentationAssembly.presentCollectionViewOfPhotos(sender: self.viewControlerToWorkWith)
+            self.presentationAssembly.presentCollectionViewOfPhotos(sender: self.viewControlerToWorkWith, delegate: self)
         }))
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         self.viewControlerToWorkWith.show(allert: actionSheet)

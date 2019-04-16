@@ -7,7 +7,7 @@
 //
 
 import Foundation
-//import UIKit.UIImage
+import UIKit.UIImage
 
 
 
@@ -17,6 +17,7 @@ struct CatApiModel: Codable {
     let width: Int
     let height: Int
 }
+
 
 enum Result<T> {
     case success(T)
@@ -42,10 +43,8 @@ protocol IRequestSender {
 }
 
 class CatItemParser: IParser {
-    
     typealias Model = [CatApiModel]
     func parse(data: Data) -> [CatApiModel]? {
-        let cats: [CatApiModel] = []
         do {
             let jsonDecoder = JSONDecoder()
             let cats =  try jsonDecoder.decode(Array<CatApiModel>.self, from: data)
@@ -53,6 +52,13 @@ class CatItemParser: IParser {
         }
         catch {print(error)}
         return nil
+    }
+}
+
+class UIImageParser: IParser {
+    typealias Model = UIImage
+    func parse(data: Data) -> UIImage? {
+        return UIImage(data: data)
     }
 }
 
@@ -71,6 +77,14 @@ class GetCatsRequest: IRequest {
         var request = URLRequest(url: url)
         request.setValue(self.key, forHTTPHeaderField: "x-api-key")
         self.urlRequest = request
+    }
+}
+
+class GetCatImage: IRequest {
+    var urlRequest: URLRequest?
+    init(byString url: String) {
+        guard let url = URL(string: url) else {fatalError("URL hasn't been created")}
+        self.urlRequest = URLRequest(url: url)
     }
 }
 
@@ -99,7 +113,11 @@ class RequestSender: IRequestSender {
 }
 
 struct RequestFactory {
-    static func getCats() -> RequestConfig<CatItemParser> {
-        return RequestConfig<CatItemParser>(request: GetCatsRequest(), parser: CatItemParser())
+    static func getCats(limit: Int = 100) -> RequestConfig<CatItemParser> {
+        return RequestConfig<CatItemParser>(request: GetCatsRequest(limit: limit), parser: CatItemParser())
     }
+    static func getImage(byUrl url: String) -> RequestConfig<UIImageParser> {
+        return RequestConfig<UIImageParser>(request: GetCatImage(byString: url), parser: UIImageParser())
+    }
+    
 }

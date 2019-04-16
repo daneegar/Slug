@@ -19,7 +19,7 @@ class PicturesViewController: UIViewController, PicturesViewControllerProtocol {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.collectionView.delegate = self
+        self.view.layoutIfNeeded()
     }
     
     

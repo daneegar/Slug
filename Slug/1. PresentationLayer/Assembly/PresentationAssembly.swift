@@ -19,19 +19,11 @@ protocol IPresentationAssembly: class {
     func initSession()
     func present(conversation conv: Conversation)
     func presentProfileMainViewContoller()
-    func presentCollectionViewOfPhotos(sender view: UIViewController)
-    func getUrlsForPictures(complition: (([String]?)->Void)?)
+    func presentCollectionViewOfPhotos(sender view: UIViewController, delegate: TakeImageDelegate)
+    func presentView(ofPhoto photo: UIImage, sender: UINavigationController?, delegate: TakeImageDelegate)
 }
 
 class PresentationAssembly: IPresentationAssembly {
-
-
-
-
-    
-    let requstConfig = RequestFactory.getCats()
-    
-    
     
     private lazy var storyboard = UIStoryboard(name: "Main", bundle: nil)
     
@@ -64,33 +56,32 @@ class PresentationAssembly: IPresentationAssembly {
         }
     }
     
-    func presentCollectionViewOfPhotos(sender view: UIViewController) {
+    func presentCollectionViewOfPhotos(sender view: UIViewController, delegate: TakeImageDelegate) {
         guard let nvc = self.storyboard.instantiateViewController(withIdentifier: "imagesNavigationController") as? UINavigationController
             else {fatalError()}
         view.present(nvc, animated: true, completion: nil)
         guard let vc = nvc.children.first as? PicturesViewControllerProtocol
             else {fatalError("There is no child or view controoler doesn't conform ConversationListViewControllerProtocol")}
         DispatchQueue.main.async {
-            let _ = PicturesViewPresenter(forViewController: vc, presentationAssembly: self)
+            let _ = PicturesViewPresenter(forViewController: vc,
+                                          presentationAssembly: self,
+                                          model: PhotosModel(),
+                                          delegate: delegate)
         }
     }
     
-
-    
-    func getUrlsForPictures(complition: (([String]?) -> Void)?) {
-        self.getCats { (cats, error) in
-            if let error = error {
-                print(error)
-                return
-            }
-            if let cats = cats {
-                let result = cats.map({$0.url})
-                complition?(result)
-            }
+    func presentView(ofPhoto photo: UIImage, sender: UINavigationController?, delegate: TakeImageDelegate) {
+        guard let vc = self.storyboard.instantiateViewController(withIdentifier: "photoViewController") as? PictureViewController
+            else {fatalError()}
+        vc.image = photo
+        vc.delegate = delegate
+        if let nvc = sender {
+            nvc.pushViewController(vc, animated: true)
+        } else {
+            let nvc = UINavigationController()
+            nvc.pushViewController(vc, animated: false)
         }
     }
-    
-
     
     func initSession() {
         if let app = UIApplication.shared.delegate as? AppDelegate{
@@ -105,17 +96,6 @@ class PresentationAssembly: IPresentationAssembly {
                 self.rootPresenter = ConversationListPresenter(forViewController: vc, presentationAssembly: self)
             }
             self.rootNavigationViewController = nvc
-        }
-    }
-    func getCats(complitionHandler: @escaping ([CatApiModel]?, String?) -> Void) {
-        let requestSender = RequestSender()
-        requestSender.send(config: self.requstConfig) { (result: Result<[CatApiModel]>) in
-            switch result {
-            case .success(let cats):
-                complitionHandler(cats, nil)
-            case .error(let error):
-                complitionHandler(nil, error)
-            }
         }
     }
 }
