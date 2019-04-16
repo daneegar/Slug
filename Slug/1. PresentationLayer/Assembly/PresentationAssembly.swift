@@ -19,9 +19,20 @@ protocol IPresentationAssembly: class {
     func initSession()
     func present(conversation conv: Conversation)
     func presentProfileMainViewContoller()
+    func presentCollectionViewOfPhotos(sender view: UIViewController)
+    func getUrlsForPictures(complition: (([String]?)->Void)?)
 }
 
 class PresentationAssembly: IPresentationAssembly {
+
+
+
+
+    
+    let requstConfig = RequestFactory.getCats()
+    
+    
+    
     private lazy var storyboard = UIStoryboard(name: "Main", bundle: nil)
     
     private var curentWindow: UIWindow!
@@ -51,8 +62,35 @@ class PresentationAssembly: IPresentationAssembly {
         DispatchQueue.main.async {
             let _ = ConversationPresenter(forViewController: vc, withConversation: conv)
         }
-        
     }
+    
+    func presentCollectionViewOfPhotos(sender view: UIViewController) {
+        guard let nvc = self.storyboard.instantiateViewController(withIdentifier: "imagesNavigationController") as? UINavigationController
+            else {fatalError()}
+        view.present(nvc, animated: true, completion: nil)
+        guard let vc = nvc.children.first as? PicturesViewControllerProtocol
+            else {fatalError("There is no child or view controoler doesn't conform ConversationListViewControllerProtocol")}
+        DispatchQueue.main.async {
+            let _ = PicturesViewPresenter(forViewController: vc, presentationAssembly: self)
+        }
+    }
+    
+
+    
+    func getUrlsForPictures(complition: (([String]?) -> Void)?) {
+        self.getCats { (cats, error) in
+            if let error = error {
+                print(error)
+                return
+            }
+            if let cats = cats {
+                let result = cats.map({$0.url})
+                complition?(result)
+            }
+        }
+    }
+    
+
     
     func initSession() {
         if let app = UIApplication.shared.delegate as? AppDelegate{
@@ -69,5 +107,15 @@ class PresentationAssembly: IPresentationAssembly {
             self.rootNavigationViewController = nvc
         }
     }
-    
+    func getCats(complitionHandler: @escaping ([CatApiModel]?, String?) -> Void) {
+        let requestSender = RequestSender()
+        requestSender.send(config: self.requstConfig) { (result: Result<[CatApiModel]>) in
+            switch result {
+            case .success(let cats):
+                complitionHandler(cats, nil)
+            case .error(let error):
+                complitionHandler(nil, error)
+            }
+        }
+    }
 }

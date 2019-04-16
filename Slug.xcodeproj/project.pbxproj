@@ -32,6 +32,12 @@
 		923B416C22593A3700BFBB5E /* FRCManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923B416B22593A3700BFBB5E /* FRCManager.swift */; };
 		923FB931225B51EC005E0ABF /* CommunicationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923FB930225B51EC005E0ABF /* CommunicationManager.swift */; };
 		923FB934225B554E005E0ABF /* MessageStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923FB933225B554E005E0ABF /* MessageStruct.swift */; };
+		928C06842265E470003321D3 /* keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 928C06832265E470003321D3 /* keys.plist */; };
+		928C06862265EA9E003321D3 /* PicturesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C06852265EA9E003321D3 /* PicturesViewController.swift */; };
+		928C06882265EB22003321D3 /* PictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C06872265EB22003321D3 /* PictureViewController.swift */; };
+		928C068A2265ECD3003321D3 /* PicturesViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C06892265ECD3003321D3 /* PicturesViewPresenter.swift */; };
+		928C068C22661BBF003321D3 /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C068B22661BBF003321D3 /* PhotoCell.swift */; };
+		928C068E22662174003321D3 /* CatApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C068D22662174003321D3 /* CatApi.swift */; };
 		92BCB8EC22563FF70042261F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BCB8EB22563FF70042261F /* AppDelegate.swift */; };
 		92BCB8F422563FF70042261F /* Slug.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 92BCB8F222563FF70042261F /* Slug.xcdatamodeld */; };
 		92BCB8F622563FF80042261F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92BCB8F522563FF80042261F /* Assets.xcassets */; };
@@ -70,6 +76,12 @@
 		923B416B22593A3700BFBB5E /* FRCManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FRCManager.swift; sourceTree = "<group>"; };
 		923FB930225B51EC005E0ABF /* CommunicationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommunicationManager.swift; sourceTree = "<group>"; };
 		923FB933225B554E005E0ABF /* MessageStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageStruct.swift; sourceTree = "<group>"; };
+		928C06832265E470003321D3 /* keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = keys.plist; sourceTree = "<group>"; };
+		928C06852265EA9E003321D3 /* PicturesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PicturesViewController.swift; path = "Slug/1. PresentationLayer/ViewControllers/PicturesViewController.swift"; sourceTree = SOURCE_ROOT; };
+		928C06872265EB22003321D3 /* PictureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PictureViewController.swift; path = "Slug/1. PresentationLayer/ViewControllers/PictureViewController.swift"; sourceTree = SOURCE_ROOT; };
+		928C06892265ECD3003321D3 /* PicturesViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicturesViewPresenter.swift; sourceTree = "<group>"; };
+		928C068B22661BBF003321D3 /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
+		928C068D22662174003321D3 /* CatApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatApi.swift; sourceTree = "<group>"; };
 		92BCB8E822563FF70042261F /* Slug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Slug.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92BCB8EB22563FF70042261F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		92BCB8F322563FF70042261F /* Slug.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Slug.xcdatamodel; sourceTree = "<group>"; };
@@ -121,6 +133,8 @@
 				923B41402256964100BFBB5E /* ProfileViewController.swift */,
 				923B41422256964900BFBB5E /* ConversationListViewController.swift */,
 				923B41442256965000BFBB5E /* ConversationViewController.swift */,
+				928C06852265EA9E003321D3 /* PicturesViewController.swift */,
+				928C06872265EB22003321D3 /* PictureViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -139,6 +153,7 @@
 			children = (
 				923B415F2256A5D000BFBB5E /* ConversationListPresenter.swift */,
 				923B41672257967700BFBB5E /* ProfileViewPresenter.swift */,
+				928C06892265ECD3003321D3 /* PicturesViewPresenter.swift */,
 				923B416922592CB800BFBB5E /* ConversationPresenter.swift */,
 			);
 			path = Presenters;
@@ -184,6 +199,7 @@
 			isa = PBXGroup;
 			children = (
 				92BCB8FA22563FF80042261F /* Info.plist */,
+				928C06832265E470003321D3 /* keys.plist */,
 				92BCB908225640300042261F /* Supporting Files */,
 				92BCB905225640270042261F /* 1. PresentationLayer */,
 				92BCB902225640260042261F /* 2. ServiceLayer */,
@@ -231,6 +247,7 @@
 				923B414A2256983B00BFBB5E /* StorageManager.swift */,
 				923B416B22593A3700BFBB5E /* FRCManager.swift */,
 				92E48CCA225D401700337357 /* BackgroundStorageTasks.swift */,
+				928C068D22662174003321D3 /* CatApi.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -259,6 +276,7 @@
 			isa = PBXGroup;
 			children = (
 				923B413E2256962800BFBB5E /* Main.storyboard */,
+				928C068B22661BBF003321D3 /* PhotoCell.swift */,
 				923B415422569A9E00BFBB5E /* ChatCell.swift */,
 				923B415622569A9E00BFBB5E /* ChatCell.xib */,
 				923B415722569A9E00BFBB5E /* IncomingMessagCell.xib */,
@@ -362,6 +380,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				928C06842265E470003321D3 /* keys.plist in Resources */,
 				92BCB8F922563FF80042261F /* LaunchScreen.storyboard in Resources */,
 				923B415B22569A9E00BFBB5E /* ChatCell.xib in Resources */,
 				923B415C22569A9E00BFBB5E /* IncomingMessagCell.xib in Resources */,
@@ -407,6 +426,7 @@
 				923B416C22593A3700BFBB5E /* FRCManager.swift in Sources */,
 				923B414F225699B800BFBB5E /* EnDecoding.swift in Sources */,
 				92BCB90C2256434E0042261F /* RootAssembly.swift in Sources */,
+				928C06882265EB22003321D3 /* PictureViewController.swift in Sources */,
 				923B41492256973700BFBB5E /* MultipeerCommunicator.swift in Sources */,
 				923FB931225B51EC005E0ABF /* CommunicationManager.swift in Sources */,
 				923B4150225699B800BFBB5E /* UIColor.swift in Sources */,
@@ -421,13 +441,17 @@
 				92BCB913225644F40042261F /* CoreAssembly.swift in Sources */,
 				92BCB8F422563FF70042261F /* Slug.xcdatamodeld in Sources */,
 				923B41682257967700BFBB5E /* ProfileViewPresenter.swift in Sources */,
+				928C068A2265ECD3003321D3 /* PicturesViewPresenter.swift in Sources */,
 				92BCB90E225644A40042261F /* PresentationAssembly.swift in Sources */,
 				923B415922569A9E00BFBB5E /* ChatCell.swift in Sources */,
 				92BCB8EC22563FF70042261F /* AppDelegate.swift in Sources */,
 				923B41432256964900BFBB5E /* ConversationListViewController.swift in Sources */,
+				928C068C22661BBF003321D3 /* PhotoCell.swift in Sources */,
+				928C068E22662174003321D3 /* CatApi.swift in Sources */,
 				923B415822569A9E00BFBB5E /* MessageCell.swift in Sources */,
 				92E48CCB225D401700337357 /* BackgroundStorageTasks.swift in Sources */,
 				923B41412256964100BFBB5E /* ProfileViewController.swift in Sources */,
+				928C06862265EA9E003321D3 /* PicturesViewController.swift in Sources */,
 				923B413A22567E7000BFBB5E /* CoreDataStack.swift in Sources */,
 				923B414B2256983B00BFBB5E /* StorageManager.swift in Sources */,
 			);
