@@ -22,7 +22,7 @@ xcuserdata/
 *.xccheckout
 *.xcscmblueprint
 
-/Slug/keys.plist
+keys.plist
 
 ## Obj-C/Swift specific
 *.hmap
