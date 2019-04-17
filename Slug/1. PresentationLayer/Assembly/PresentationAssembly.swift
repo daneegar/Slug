@@ -65,7 +65,8 @@ class PresentationAssembly: IPresentationAssembly {
         DispatchQueue.main.async {
             let _ = PicturesViewPresenter(forViewController: vc,
                                           presentationAssembly: self,
-                                          model: PhotosModel(),
+                                          catsService: self.serviceAssembly.catService,
+                                          imageService: self.serviceAssembly.imageService,
                                           delegate: delegate)
         }
     }

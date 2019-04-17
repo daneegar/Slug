@@ -38,7 +38,8 @@
 		928C068A2265ECD3003321D3 /* PicturesViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C06892265ECD3003321D3 /* PicturesViewPresenter.swift */; };
 		928C068C22661BBF003321D3 /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C068B22661BBF003321D3 /* PhotoCell.swift */; };
 		928C068E22662174003321D3 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C068D22662174003321D3 /* Network.swift */; };
-		928C069222667F87003321D3 /* PhotosModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C069122667F87003321D3 /* PhotosModel.swift */; };
+		928C06942267538F003321D3 /* CatsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C06932267538F003321D3 /* CatsService.swift */; };
+		928C069622675872003321D3 /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C069522675872003321D3 /* ImageService.swift */; };
 		92BCB8EC22563FF70042261F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BCB8EB22563FF70042261F /* AppDelegate.swift */; };
 		92BCB8F422563FF70042261F /* Slug.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 92BCB8F222563FF70042261F /* Slug.xcdatamodeld */; };
 		92BCB8F622563FF80042261F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92BCB8F522563FF80042261F /* Assets.xcassets */; };
@@ -83,7 +84,8 @@
 		928C06892265ECD3003321D3 /* PicturesViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicturesViewPresenter.swift; sourceTree = "<group>"; };
 		928C068B22661BBF003321D3 /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		928C068D22662174003321D3 /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
-		928C069122667F87003321D3 /* PhotosModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosModel.swift; sourceTree = "<group>"; };
+		928C06932267538F003321D3 /* CatsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatsService.swift; sourceTree = "<group>"; };
+		928C069522675872003321D3 /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
 		92BCB8E822563FF70042261F /* Slug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Slug.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92BCB8EB22563FF70042261F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		92BCB8F322563FF70042261F /* Slug.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Slug.xcdatamodel; sourceTree = "<group>"; };
@@ -125,7 +127,6 @@
 			isa = PBXGroup;
 			children = (
 				923B416222576DEB00BFBB5E /* User.swift */,
-				928C069122667F87003321D3 /* PhotosModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -246,6 +247,8 @@
 			children = (
 				923FB935225B5953005E0ABF /* CommunicationManager */,
 				923B4151225699DB00BFBB5E /* CameraHandler.swift */,
+				928C06932267538F003321D3 /* CatsService.swift */,
+				928C069522675872003321D3 /* ImageService.swift */,
 				923B41462256972100BFBB5E /* DatesHandler.swift */,
 				923B414A2256983B00BFBB5E /* StorageManager.swift */,
 				923B416B22593A3700BFBB5E /* FRCManager.swift */,
@@ -438,7 +441,9 @@
 				923B41602256A5D000BFBB5E /* ConversationListPresenter.swift in Sources */,
 				923B41452256965000BFBB5E /* ConversationViewController.swift in Sources */,
 				923B416322576DEB00BFBB5E /* User.swift in Sources */,
+				928C069622675872003321D3 /* ImageService.swift in Sources */,
 				923FB934225B554E005E0ABF /* MessageStruct.swift in Sources */,
+				928C06942267538F003321D3 /* CatsService.swift in Sources */,
 				923B41472256972100BFBB5E /* DatesHandler.swift in Sources */,
 				923B416A22592CB800BFBB5E /* ConversationPresenter.swift in Sources */,
 				92BCB913225644F40042261F /* CoreAssembly.swift in Sources */,
@@ -448,7 +453,6 @@
 				92BCB90E225644A40042261F /* PresentationAssembly.swift in Sources */,
 				923B415922569A9E00BFBB5E /* ChatCell.swift in Sources */,
 				92BCB8EC22563FF70042261F /* AppDelegate.swift in Sources */,
-				928C069222667F87003321D3 /* PhotosModel.swift in Sources */,
 				923B41432256964900BFBB5E /* ConversationListViewController.swift in Sources */,
 				928C068C22661BBF003321D3 /* PhotoCell.swift in Sources */,
 				928C068E22662174003321D3 /* Network.swift in Sources */,
@@ -607,7 +611,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = denis.garifyanov.com.Slug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -627,7 +631,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = denis.garifyanov.com.Slug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

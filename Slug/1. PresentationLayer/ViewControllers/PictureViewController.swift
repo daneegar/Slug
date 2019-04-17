@@ -10,6 +10,7 @@ import UIKit
 
 class PictureViewController: UIViewController {
     
+    @IBOutlet weak var saveButton: UIButton!
     
     var delegate: TakeImageDelegate?
     @IBOutlet weak var imageView: UIImageView!
@@ -27,6 +28,13 @@ class PictureViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.imageView.image = self.image
+        self.configButton()
+    }
+    func configButton() {
+        self.saveButton.backgroundColor = .white
+        self.saveButton.layer.borderColor = UIColor(named: "black")?.cgColor
+        self.saveButton.layer.borderWidth = 1
+        self.saveButton.layer.cornerRadius = 10
     }
 
 }
