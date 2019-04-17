@@ -16,7 +16,7 @@ DerivedData/
 *.perspectivev3
 !default.perspectivev3
 xcuserdata/
-
+*keys.plist
 ## Other
 *.moved-aside
 *.xccheckout
@@ -76,4 +76,4 @@ fastlane/test_output
 # https://github.com/johnno1962/injectionforxcode
 
 iOSInjectionProject/
-keys.plist
+
