@@ -12,10 +12,7 @@ protocol ICatService {
 }
 
 class CatsService: ICatService {
-    private let requestGetCatsConfig = RequestFactory.getCats(limit: 100)
-    private let requestSender = RequestSender()
     
- 
     func getUrlsForPictures(complition: (([String]?) -> Void)?) {
         self.getCats { (cats, error) in
             if let error = error {
