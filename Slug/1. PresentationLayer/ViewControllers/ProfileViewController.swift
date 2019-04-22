@@ -15,15 +15,15 @@ protocol MainUserProfileView: UIViewController {
     var presenter: PresenterForProfileViewController? {get set}
 }
 
-class ProfileViewController: UIViewController, UINavigationControllerDelegate {
+class ProfileViewController: UIViewController, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
     var presenter: PresenterForProfileViewController?
     
     var keyboardHeight: CGFloat!
     var activeField: UITextView?
     let activityIndicator = UIActivityIndicatorView(style: .gray)
+    var gestRegognizers: [UIGestureRecognizer] = []
     private var editingModeOn = false
     @IBOutlet weak var profilePhoto: UIImageView!
-    @IBOutlet weak var buttonsView: UIViewAnimating!
     @IBOutlet weak var buttonEdit: UIButton!
     @IBOutlet weak var buttonGCD: UIButton!
     @IBOutlet weak var buttonOperation: UIButton!
@@ -70,7 +70,15 @@ class ProfileViewController: UIViewController, UINavigationControllerDelegate {
         super.viewDidLoad()
         self.setupButtons()
         self.setupProfilePhotoImageAndAddButton()
+        self.setupView()
     }
+    
+    private func setupView() {
+        self.aboutTextView.layer.borderColor = UIColor.black.cgColor
+        self.aboutTextView.layer.borderWidth = 1.0
+        self.contentView.layoutIfNeeded()
+    }
+    
     // MARK: - functions to setup View
     private func setupButtons() {
         self.buttonEdit.backgroundColor = .white
@@ -119,12 +127,17 @@ extension ProfileViewController: UITextFieldDelegate, UITextViewDelegate {
     }
     func switchEditingMode() {
         self.editingModeOn = !self.editingModeOn
-        UIView.animate(withDuration: 0.3, animations: {
+        UIView.animate(withDuration: 0.3) {
             self.aboutTextView.isEditable = self.editingModeOn
             self.aboutTextView.textColor = self.editingModeOn ? .black : UIColor(rgb: 0xD3D3D3, alpha: 1.0)
             self.nameTextField.isEnabled = self.editingModeOn
             self.nameTextField.textColor = self.editingModeOn ? .black : UIColor(rgb: 0xD3D3D3, alpha: 1.0)
             self.iconAddPhoto.isHidden = !self.editingModeOn
+            self.view.layoutIfNeeded()
+        }
+        
+        UIView.animate(withDuration: 0.3, animations: {
+
             if self.editingModeOn {
                 self.buttonEdit.setTitle("Сохранить", for: .normal)
             } else {
@@ -202,5 +215,3 @@ extension ProfileViewController: MainUserProfileView {
     }
     
 }
-
-

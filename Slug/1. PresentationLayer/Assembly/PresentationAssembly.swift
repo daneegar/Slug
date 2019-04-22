@@ -26,16 +26,13 @@ protocol IPresentationAssembly: class {
 class PresentationAssembly: IPresentationAssembly {
     
     private lazy var storyboard = UIStoryboard(name: "Main", bundle: nil)
-    
-    private var curentWindow: UIWindow!
+    var curentWindow: IWindowWithTouchTrace!
     private let serviceAssembly: IServicesAssembly
     private var rootPresenter: PresenterForConversationList?
     private var rootNavigationViewController: UINavigationController?
-    
     init(serviceAssembly: IServicesAssembly) {
         self.serviceAssembly = serviceAssembly
     }
-    
     func presentProfileMainViewContoller() {
         guard let nvc = self.storyboard.instantiateViewController(withIdentifier: "mainUserProfile") as? UINavigationController
             else {fatalError()}
@@ -87,7 +84,7 @@ class PresentationAssembly: IPresentationAssembly {
     func initSession() {
         if let app = UIApplication.shared.delegate as? AppDelegate{
             let nvc = self.storyboard.instantiateViewController(withIdentifier: "rootNavigationController") as? UINavigationController
-            let window = UIWindow(frame: UIScreen.main.bounds)
+            let window = WindowWithTouchTrace(frame: UIScreen.main.bounds, withCellEmitterGenetor: nil)
             window.rootViewController = nvc
             window.makeKeyAndVisible()
             app.window = window
@@ -100,3 +97,17 @@ class PresentationAssembly: IPresentationAssembly {
         }
     }
 }
+
+
+
+
+
+struct StrokeSample {
+    let location: CGPoint
+    
+    init(location: CGPoint) {
+        self.location = location
+    }
+}
+
+

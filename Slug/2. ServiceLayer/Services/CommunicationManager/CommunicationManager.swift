@@ -156,6 +156,7 @@ extension CommunicationManager: CommunicatorManagerSenderBrowsingAdvertising {
                     DispatchQueue.main.async {
                         self.addMessageToConv(theMessage: newMsg, inConversation: conv)
                     }
+                    return
                 }
                 print(error.debugDescription)
             }

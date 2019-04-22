@@ -34,6 +34,18 @@ class FRCManager {
                                                    predicate: predicate)
     }
     
+    static func createFrcForCurrentConversation(delegate: NSFetchedResultsControllerDelegate, forConversationId id: String) -> NSFetchedResultsController<Conversation> {
+        var sortDescriptors: [NSSortDescriptor] = []
+        sortDescriptors.append(NSSortDescriptor(key: "id", ascending: true))
+        let predicate = NSPredicate(format: "id = %@", id)
+        return StorageManager.singleton.prepareFetchResultController(ofType: Conversation.self,
+                                                                     sortedBy: sortDescriptors,
+                                                                     in: .mainContext,
+                                                                     withSelector: nil,
+                                                                     delegate: delegate,
+                                                                     predicate: predicate)
+    }
+    
 //    private static func general <T:NSManagedObject> (withType: T.Type, delegate: NSFetchedResultsControllerDelegate) -> NSFetchedResultsController<T> {
 //
 ////        return StorageManager.singleton.prepareFetchResultController(ofType: withType,

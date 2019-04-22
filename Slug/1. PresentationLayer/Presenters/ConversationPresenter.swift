@@ -21,16 +21,26 @@ class ConversationPresenter: NSObject, PresenterForConversationViewController, C
     private weak var tableViewToWorkWith: UITableView!
     private var frc: NSFetchedResultsController<Message>?
     private var conversation: Conversation
+    private var isOffline: Bool {
+        didSet {
+            print(isOffline)
+        }
+    }
+    private var frcOfCurrentConversation: NSFetchedResultsController<Conversation>?
     
     init (forViewController vc: ConversationViewControllerProtocol, withConversation conv: Conversation) {
         self.uiViewControllerToWorkWith = vc
         self.tableViewToWorkWith = vc.converstaionTableView
         self.conversation = conv
+        self.isOffline = conv.isOffline
         super.init()
         self.uiViewControllerToWorkWith.presenter = self
         self.tableViewToWorkWith.dataSource = self
+        self.uiViewControllerToWorkWith.setTitle(conversationName: conv.user?.name, isOffline: conv.isOffline)
         guard let id = self.conversation.id else {fatalError("conversation Id hasn't been unwrapped \(#function)")}
         self.frc = FRCManager.frcForMessages(delegate: self, forConversationId: id)
+        self.frcOfCurrentConversation = FRCManager.createFrcForCurrentConversation(delegate: self,
+                                                                                   forConversationId: id)
         self.performFetch()
         self.tableViewToWorkWith.reloadData()
     }
@@ -50,6 +60,7 @@ class ConversationPresenter: NSObject, PresenterForConversationViewController, C
     private func performFetch() {
         do {
             try frc?.performFetch()
+            try frcOfCurrentConversation?.performFetch()
         } catch {
             print("perform Fetching FRC done with errors")
         }
@@ -100,6 +111,9 @@ extension ConversationPresenter: UITableViewDataSource {
 
 extension ConversationPresenter: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        if controller == self.frcOfCurrentConversation {
+            self.uiViewControllerToWorkWith.opponentOfConversatoinChangeStatus(isOffline: self.checkTheUserIsOffline())
+        }
         self.tableViewToWorkWith.endUpdates()
     }
     
@@ -107,7 +121,9 @@ extension ConversationPresenter: NSFetchedResultsControllerDelegate {
         self.tableViewToWorkWith.beginUpdates()
     }
     
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type:
+        NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        if controller != self.frc {return}
         switch type {
         case .insert:
             self.tableViewToWorkWith.insertRows(at: [newIndexPath!], with: .automatic)
@@ -121,6 +137,12 @@ extension ConversationPresenter: NSFetchedResultsControllerDelegate {
         @unknown default:
             print("FetchResultController back the uknowed Change type")
         }
+    }
+    func checkTheUserIsOffline() -> Bool {
+        guard let isOffline = self.frcOfCurrentConversation?.fetchedObjects?.first?.isOffline else {
+            return true
+        }
+        return isOffline
     }
 }
 
