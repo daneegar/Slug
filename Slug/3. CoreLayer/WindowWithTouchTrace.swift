@@ -17,11 +17,12 @@ protocol IWindowWithTouchTrace {
 
 class WindowWithTouchTrace: UIWindow, IWindowWithTouchTrace {
     private var tinkoffLogoGenetor: ICellEmitterGenerator!
-    var trasingIsEnable = true
+    var trasingIsEnable = false
     init(frame: CGRect, withCellEmitterGenetor cellEmitterGenerator: ICellEmitterGenerator?) {
         super.init(frame: frame)
         if let cem = cellEmitterGenerator {
             self.tinkoffLogoGenetor = cem
+            return
         }
         self.tinkoffLogoGenetor = CellEmitterGeneratorInPoint(layer: self.layer, pngNamed: "logo")
     }
@@ -39,7 +40,6 @@ class WindowWithTouchTrace: UIWindow, IWindowWithTouchTrace {
             default: return
             }
         }
-        
     }
     func setTrasingEnable() {
         self.trasingIsEnable = true
@@ -47,6 +47,7 @@ class WindowWithTouchTrace: UIWindow, IWindowWithTouchTrace {
     
     func setTrasingDisable() {
         self.trasingIsEnable = false
+        self.tinkoffLogoGenetor.stopShow()
     }
     
     private func touchBegan(_ touch: UITouch) {
@@ -81,7 +82,7 @@ class CellEmitterGeneratorInPoint: ICellEmitterGenerator{
     
     init?(layer: CALayer, pngNamed: String){
         guard let image = UIImage(named: pngNamed) else {
-            print("image didn't found can't be get")
+            print("image didn't found")
             return nil
         }
         guard let cgImage = image.cgImage else {

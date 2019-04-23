@@ -13,28 +13,43 @@ protocol MainUserProfileView: UIViewController {
     func updateProfilePhoto(whitImage image: UIImage)
     func show(allert: UIAlertController)
     var presenter: PresenterForProfileViewController? {get set}
+    var switchOne: UISwitch! {get set}
+    var charachterCounter: UILabel!{get set}
+    var maxCharOfName: Int {get set}
+    var maxCharOfAboutInformation: Int {get set}
 }
 
 class ProfileViewController: UIViewController, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
     var presenter: PresenterForProfileViewController?
     
+    var maxCharOfName: Int = 30
+    var maxCharOfAboutInformation: Int = 200
+    
+    @IBOutlet weak var charachterCounter: UILabel!
     var keyboardHeight: CGFloat!
     var activeField: UITextView?
     let activityIndicator = UIActivityIndicatorView(style: .gray)
     var gestRegognizers: [UIGestureRecognizer] = []
     private var editingModeOn = false
+    @IBOutlet weak var photoView: UIView!
+    @IBOutlet weak var nameView: UIView!
+    @IBOutlet weak var aboutView: UIView!
     @IBOutlet weak var profilePhoto: UIImageView!
     @IBOutlet weak var buttonEdit: UIButton!
-    @IBOutlet weak var buttonGCD: UIButton!
-    @IBOutlet weak var buttonOperation: UIButton!
+    @IBOutlet weak var tinkoffEffectSwitcherView: UIView!
+    @IBOutlet weak var switchOne: UISwitch!
     @IBOutlet weak var iconAddPhoto: UIView!
     @IBOutlet weak var contentScrollView: UIScrollView!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var aboutTextView: UITextView!
-    @IBOutlet weak var heightOfProfilePhotoView: NSLayoutConstraint!
-    @IBOutlet weak var constraintContenViewHeight: NSLayoutConstraint!
     @IBOutlet weak var buttinViewBottom: NSLayoutConstraint!
+    @IBOutlet weak var iconAddPhotoHeight: NSLayoutConstraint!
+    @IBOutlet weak var iconAddPhotoWidth: NSLayoutConstraint!
+    var defaultIconAddPhotoHeight: CGFloat!
+    var defaulticonAddPhotoWidth: CGFloat!
+    
+    
     @IBAction func addPhoto(_ sender: Any) {
         guard let presenter = self.presenter else {fatalError()}
         presenter.addPictureButtonPressed()
@@ -51,14 +66,11 @@ class ProfileViewController: UIViewController, UINavigationControllerDelegate, U
     @IBAction func doneButtonPressed (_ sender: Any) {
         self.presenter?.doneButtonPressed()
     }
-
-    @IBAction func gcdButtonPressed(_ sender: Any) {
-        
+    @IBAction func switchOneToggled(_ sender: Any) {
+        self.presenter?.tinkoffEffectSwithcToggled(isOn: self.switchOne.isOn)
     }
-
-    @IBAction func operationButtonPressed(_ sender: Any) {
-
-    }
+    
+    
     override func viewDidLoad() {
         self.presenter?.viewControllerDidLoad()
         self.contentScrollView.flashScrollIndicators()
@@ -66,7 +78,6 @@ class ProfileViewController: UIViewController, UINavigationControllerDelegate, U
         self.disableEditingMode()
         self.addObserveToKeyboard()
         self.setupActivityIndicator()
-        self.saveButtons(makeEnable: false)
         super.viewDidLoad()
         self.setupButtons()
         self.setupProfilePhotoImageAndAddButton()
@@ -74,20 +85,41 @@ class ProfileViewController: UIViewController, UINavigationControllerDelegate, U
     }
     
     private func setupView() {
-        self.aboutTextView.layer.borderColor = UIColor.black.cgColor
-        self.aboutTextView.layer.borderWidth = 1.0
-        self.contentView.layoutIfNeeded()
+        self.defaulticonAddPhotoWidth = iconAddPhotoWidth.constant
+        self.defaultIconAddPhotoHeight = iconAddPhotoHeight.constant
+        self.iconAddPhotoHeight.constant = 0
+        self.iconAddPhotoWidth.constant = 0
+        
+        self.charachterCounter.alpha = 0
+        self.aboutTextView.layer.cornerRadius = 5
+        self.aboutTextView.layer.borderWidth = 0.5
+        self.aboutTextView.layer.borderColor = #colorLiteral(red: 0.8039951324, green: 0.8038140535, blue: 0.8124365211, alpha: 1)
+        self.photoView.layer.cornerRadius = 40
+        self.photoView.layer.shadowRadius = 2.0
+        self.photoView.layer.shadowOffset = .zero
+        self.photoView.layer.shadowOpacity = 0.5
+        self.nameView.layer.cornerRadius = 10
+        self.nameView.layer.shadowRadius = 2.0
+        self.nameView.layer.shadowOffset = .zero
+        self.nameView.layer.shadowOpacity = 0.5
+        self.aboutView.layer.cornerRadius = 10
+        self.aboutView.layer.shadowRadius = 2.0
+        self.aboutView.layer.shadowOffset = .zero
+        self.aboutView.layer.shadowOpacity = 0.5
     }
     
     // MARK: - functions to setup View
     private func setupButtons() {
-        self.buttonEdit.backgroundColor = .white
-        self.buttonEdit.layer.borderColor = UIColor(named: "black")?.cgColor
-        self.buttonEdit.layer.borderWidth = 1
         self.buttonEdit.layer.cornerRadius = 10
-        self.buttonGCD.layer.cornerRadius = 10
-        self.buttonOperation.layer.cornerRadius = 10
-        self.buttonEdit.titleLabel?.text = !self.editingModeOn ? "Сохранить" : "Редактировать"
+        self.buttonEdit.titleLabel?.text = !self.editingModeOn ? "Save" : "Edit"
+        self.buttonEdit.layer.shadowRadius = 2.0
+        self.buttonEdit.layer.shadowOffset = .zero
+        self.buttonEdit.layer.shadowOpacity = 0.5
+
+        self.tinkoffEffectSwitcherView.layer.cornerRadius = 10
+        self.tinkoffEffectSwitcherView.layer.shadowRadius = 2.0
+        self.tinkoffEffectSwitcherView.layer.shadowOffset = .zero
+        self.tinkoffEffectSwitcherView.layer.shadowOpacity = 0.5
     }
     private func setupProfilePhotoImageAndAddButton() {
         self.profilePhoto.layer.cornerRadius = 40
@@ -111,11 +143,18 @@ class ProfileViewController: UIViewController, UINavigationControllerDelegate, U
 // MARK: - editing mode handlers
 extension ProfileViewController: UITextFieldDelegate, UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
-        //self.checkProfileIsEdited()
+        if textView.text.count <= self.maxCharOfAboutInformation {
+            UIView.animate(withDuration: 0.1) {
+            self.charachterCounter.text = "\(self.aboutTextView.text.count) / \(self.maxCharOfAboutInformation)"
+            self.charachterCounter.layoutIfNeeded()
+            }
+        } else {
+            textView.text.removeLast()
+        }
     }
 
     @objc func textFieldDidChange(_ textField: UITextField) {
-        //self.checkProfileIsEdited()
+        
     }
 
     func disableEditingMode() {
@@ -123,34 +162,31 @@ extension ProfileViewController: UITextFieldDelegate, UITextViewDelegate {
         self.aboutTextView.textColor = UIColor(rgb: 0xD3D3D3, alpha: 1.0)
         self.nameTextField.isEnabled = false
         self.nameTextField.textColor = UIColor(rgb: 0xD3D3D3, alpha: 1.0)
-        self.iconAddPhoto.isHidden = true
+        
     }
     func switchEditingMode() {
         self.editingModeOn = !self.editingModeOn
         UIView.animate(withDuration: 0.3) {
+            self.charachterCounter.text = "\(self.aboutTextView.text.count) / \(self.maxCharOfAboutInformation)"
+            self.charachterCounter.alpha = self.editingModeOn ? 1 : 0
             self.aboutTextView.isEditable = self.editingModeOn
             self.aboutTextView.textColor = self.editingModeOn ? .black : UIColor(rgb: 0xD3D3D3, alpha: 1.0)
             self.nameTextField.isEnabled = self.editingModeOn
             self.nameTextField.textColor = self.editingModeOn ? .black : UIColor(rgb: 0xD3D3D3, alpha: 1.0)
-            self.iconAddPhoto.isHidden = !self.editingModeOn
+            
+            self.iconAddPhotoHeight.constant = self.editingModeOn ? self.defaultIconAddPhotoHeight : 0
+            self.iconAddPhotoWidth.constant = self.editingModeOn ? self.defaulticonAddPhotoWidth : 0
             self.view.layoutIfNeeded()
         }
-        
         UIView.animate(withDuration: 0.3, animations: {
-
             if self.editingModeOn {
-                self.buttonEdit.setTitle("Сохранить", for: .normal)
+                self.buttonEdit.setTitle("Save", for: .normal)
             } else {
-                self.buttonEdit.setTitle("Редактировать", for: .normal)
+                self.buttonEdit.setTitle("Edit", for: .normal)
             }
             self.contentView.layoutIfNeeded()
         }, completion: nil)
 
-    }
-    
-    func saveButtons(makeEnable enableStatus: Bool) {
-        self.buttonGCD.isEnabled = enableStatus
-        self.buttonOperation.isEnabled = enableStatus
     }
 }
 
@@ -181,9 +217,15 @@ extension ProfileViewController {
     func letsChangeConstraintsWhenKeyboardHideAndShow(isHide: Bool) {
         UIView.animate(withDuration: 0.3, animations: {
             if isHide {
-                self.constraintContenViewHeight.constant -= self.keyboardHeight
+                let contentInset: UIEdgeInsets = UIEdgeInsets.zero
+                self.contentScrollView.contentInset = contentInset
             } else {
-                self.constraintContenViewHeight.constant += self.keyboardHeight
+                var contentInset: UIEdgeInsets = self.contentScrollView.contentInset
+                contentInset.bottom = self.keyboardHeight
+                self.contentScrollView.contentInset = contentInset
+                var pointToGo = self.contentScrollView.contentOffset
+                pointToGo = CGPoint(x: pointToGo.x, y: pointToGo.y + self.keyboardHeight)
+                self.contentScrollView.setContentOffset(pointToGo, animated: false)
             }
             self.buttinViewBottom.constant =  isHide ? 8 : self.buttinViewBottom.constant + self.keyboardHeight
             self.view.layoutIfNeeded()
@@ -200,6 +242,7 @@ extension ProfileViewController: UIImagePickerControllerDelegate {
 }
 
 extension ProfileViewController: MainUserProfileView {
+    
     func show(allert: UIAlertController) {
         self.present(allert, animated: true, completion: nil)
     }

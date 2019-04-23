@@ -40,10 +40,6 @@ class ConversationViewController: UIViewController {
                         self.upMenu.backgroundColor = UIColor.red
                         let transform = CGAffineTransform(scaleX: 0.85, y: 0.85)
                         self.upMenu.transform = transform
-                        //self.upMenu.transform = transform
-//                        let curentFontName = self.nameOfOpponentLabel.font.fontDescriptor
-//                        let currentSize = self.nameOfOpponentLabel.font.pointSize * 0.85
-//                        self.nameOfOpponentLabel.font = UIFont(descriptor: curentFontName, size: currentSize)
                         self.upMenu.layoutIfNeeded()
                     }
                 } else {
@@ -51,7 +47,6 @@ class ConversationViewController: UIViewController {
                         self.upMenu.backgroundColor = UIColor.green
                         let transform = CGAffineTransform(scaleX: 1.15, y: 1.15)
                         self.upMenu.transform = transform
-                        //self.upMenu.transform = transform
                         self.upMenu.layoutIfNeeded()
                     }
                 }
@@ -190,7 +185,6 @@ extension ConversationViewController: ConversationViewControllerProtocol {
     func setTitle(conversationName: String?, isOffline: Bool) {
         self.isOffline = isOffline
         self.nameOfOpponentLabel.text = conversationName
-    
         self.upMenu.layer.borderColor = UIColor.white.cgColor
         self.upMenu.layer.borderWidth = 1.0
         self.upMenu.layer.cornerRadius = 15.0

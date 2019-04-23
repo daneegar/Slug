@@ -40,7 +40,9 @@ class PresentationAssembly: IPresentationAssembly {
         vcWhatWillPresent.present(nvc, animated: true, completion: nil)
         DispatchQueue.main.async {
             guard let mainViewContoller = nvc.children.first as? MainUserProfileView else {fatalError()}
-            let _ = ProfileViewPresenter(viewController: mainViewContoller, presentationAssembly: self)
+            let _ = ProfileViewPresenter(viewController: mainViewContoller,
+                                         presentationAssembly: self,
+                                         windowToControl: self.curentWindow)
         }
     }
     
@@ -88,6 +90,7 @@ class PresentationAssembly: IPresentationAssembly {
             window.rootViewController = nvc
             window.makeKeyAndVisible()
             app.window = window
+            self.curentWindow = window
             guard let vc = nvc?.children.first as? ConversationListViewControllerProtocol
                 else {fatalError("There is no child or view controoler doesn't conform ConversationListViewControllerProtocol")}
             DispatchQueue.main.async {

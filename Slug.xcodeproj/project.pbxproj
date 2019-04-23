@@ -40,7 +40,7 @@
 		928C068E22662174003321D3 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C068D22662174003321D3 /* Network.swift */; };
 		928C06942267538F003321D3 /* CatsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C06932267538F003321D3 /* CatsService.swift */; };
 		928C069622675872003321D3 /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C069522675872003321D3 /* ImageService.swift */; };
-		928C06B8226DA816003321D3 /* TinkoffWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C06B7226DA816003321D3 /* TinkoffWindow.swift */; };
+		928C06B8226DA816003321D3 /* WindowWithTouchTrace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C06B7226DA816003321D3 /* WindowWithTouchTrace.swift */; };
 		92BCB8EC22563FF70042261F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BCB8EB22563FF70042261F /* AppDelegate.swift */; };
 		92BCB8F422563FF70042261F /* Slug.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 92BCB8F222563FF70042261F /* Slug.xcdatamodeld */; };
 		92BCB8F622563FF80042261F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92BCB8F522563FF80042261F /* Assets.xcassets */; };
@@ -87,7 +87,7 @@
 		928C068D22662174003321D3 /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		928C06932267538F003321D3 /* CatsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatsService.swift; sourceTree = "<group>"; };
 		928C069522675872003321D3 /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
-		928C06B7226DA816003321D3 /* TinkoffWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TinkoffWindow.swift; sourceTree = "<group>"; };
+		928C06B7226DA816003321D3 /* WindowWithTouchTrace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowWithTouchTrace.swift; sourceTree = "<group>"; };
 		92BCB8E822563FF70042261F /* Slug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Slug.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92BCB8EB22563FF70042261F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		92BCB8F322563FF70042261F /* Slug.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Slug.xcdatamodel; sourceTree = "<group>"; };
@@ -219,11 +219,11 @@
 		92BCB900225640260042261F /* 3. CoreLayer */ = {
 			isa = PBXGroup;
 			children = (
+				928C06B7226DA816003321D3 /* WindowWithTouchTrace.swift */,
 				923FB932225B5535005E0ABF /* MultiPeerCommunicator */,
 				923B416422576E3400BFBB5E /* RandomData.swift */,
 				92BCB909225640630042261F /* CoreData */,
 				92BCB901225640260042261F /* Assembly */,
-				928C06B7226DA816003321D3 /* TinkoffWindow.swift */,
 			);
 			path = "3. CoreLayer";
 			sourceTree = "<group>";
@@ -456,7 +456,7 @@
 				92BCB90E225644A40042261F /* PresentationAssembly.swift in Sources */,
 				923B415922569A9E00BFBB5E /* ChatCell.swift in Sources */,
 				92BCB8EC22563FF70042261F /* AppDelegate.swift in Sources */,
-				928C06B8226DA816003321D3 /* TinkoffWindow.swift in Sources */,
+				928C06B8226DA816003321D3 /* WindowWithTouchTrace.swift in Sources */,
 				923B41432256964900BFBB5E /* ConversationListViewController.swift in Sources */,
 				928C068C22661BBF003321D3 /* PhotoCell.swift in Sources */,
 				928C068E22662174003321D3 /* Network.swift in Sources */,

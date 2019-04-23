@@ -15,6 +15,7 @@ protocol PresenterForProfileViewController {
     func doneButtonPressed()
     func viewControllerDidLoad()
     func addPictureButtonPressed()
+    func tinkoffEffectSwithcToggled(isOn: Bool)
 }
 
 import Foundation
@@ -22,31 +23,35 @@ import UIKit.UIAlertController
 
 class ProfileViewPresenter: NSObject, PresenterForProfileViewController {
 
-    
     weak var viewControlerToWorkWith: MainUserProfileView!
     let mainUserProfile: MainUser
     let okAllert = UIAlertController(title: "Данные сохранены", message: nil, preferredStyle: .alert)
     var cameraHandler: AddPcitureHandler!
     let presentationAssembly: IPresentationAssembly
+    let windowToControl: IWindowWithTouchTrace?
     
     private func setupAllerts() {
         self.okAllert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
     }
-    init(viewController: MainUserProfileView, presentationAssembly: IPresentationAssembly) {
+    init(viewController: MainUserProfileView,
+         presentationAssembly: IPresentationAssembly,
+         windowToControl: IWindowWithTouchTrace? = nil) {
         self.presentationAssembly = presentationAssembly
         self.viewControlerToWorkWith = viewController
+        self.windowToControl = windowToControl
         guard let userProfile = StorageManager.singleton.findLast(in: .mainContext, aModel: MainUser.self) else {fatalError("MainUser hasn't been created or loaded")}
         self.mainUserProfile = userProfile
         super.init()
         self.viewControlerToWorkWith.presenter = self
         self.cameraHandler = CameraHandler(viewController: viewController, delegate: self)
+
     }
     
     func saveButtonPressed(withName name: String?, aboutInformation info: String?, avatar image: UIImage?) {
         self.mainUserProfile.name = name
         self.mainUserProfile.aboutInfirmation = info
         self.mainUserProfile.avatar = image?.jpegData(compressionQuality: 1.0)
-        StorageManager.singleton.storeData(inTypeOfContext: .mainContext) {
+        StorageManager.singleton.storeData(inTypeOfContext: .saveContext) {
             print("Данные сохранены")
         }
     }
@@ -58,6 +63,15 @@ class ProfileViewPresenter: NSObject, PresenterForProfileViewController {
     func addPictureButtonPressed() {
         print("Выбери изображение профиля")
         self.showActionSheet()
+    }
+    
+    func tinkoffEffectSwithcToggled(isOn: Bool) {
+        guard let window = self.windowToControl else {return}
+        if isOn {
+            window.setTrasingEnable()
+            return
+        }
+        window.setTrasingDisable()
     }
     
     
@@ -76,6 +90,11 @@ class ProfileViewPresenter: NSObject, PresenterForProfileViewController {
             profilePhoto = photo
         } else {profilePhoto = nil}
         self.viewControlerToWorkWith.profileLoaded(name: name, informationAbout: aboutInfo, profilePhoto: profilePhoto)
+        if let window = windowToControl {
+            self.viewControlerToWorkWith.switchOne.isOn = window.trasingIsEnable
+            return
+        }
+        self.viewControlerToWorkWith.switchOne.isEnabled = false
     }
 }
 
@@ -99,4 +118,8 @@ extension ProfileViewPresenter: TakeImageDelegate {
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         self.viewControlerToWorkWith.show(allert: actionSheet)
     }
+}
+
+extension ProfileViewPresenter: UITextViewDelegate {
+    
 }

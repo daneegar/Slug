@@ -45,7 +45,7 @@ class PhotoCell: UICollectionViewCell {
             photo.alpha = 0
             loadingIndicator?.alpha = 1
             loadingIndicator?.startAnimating()
-            backgroundColor = #colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1)
+            backgroundColor = #colorLiteral(red: 0.9997457862, green: 0.8681770563, blue: 0.00762256328, alpha: 1)
             layer.cornerRadius = 10
         }
     }
