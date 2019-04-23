@@ -1,40 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="outGoingMessageCell" id="RSm-aZ-Ga2" customClass="MessageCell" customModule="Talks" customModuleProvider="target">
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="outGoingMessageCell" id="RSm-aZ-Ga2" customClass="MessageCell" customModule="Slug" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RSm-aZ-Ga2" id="0k6-UW-CHe">
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Исходящее сообщение" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nwx-qE-q8Y">
-                        <rect key="frame" x="116.5" y="11" width="187.5" height="21"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JZJ-CH-HJx">
+                        <rect key="frame" x="112.5" y="4" width="203.5" height="35.5"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Исходящее сообщение" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nwx-qE-q8Y">
+                                <rect key="frame" x="8" y="8" width="187.5" height="19.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.82745098039999998" green="0.82745098039999998" blue="0.82745098039999998" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="nwx-qE-q8Y" secondAttribute="bottom" constant="8" id="h0M-ji-SxX"/>
+                            <constraint firstItem="nwx-qE-q8Y" firstAttribute="top" secondItem="JZJ-CH-HJx" secondAttribute="top" constant="8" id="jNn-Ey-xhk"/>
+                            <constraint firstAttribute="trailing" secondItem="nwx-qE-q8Y" secondAttribute="trailing" constant="8" id="pPv-ke-Xjb"/>
+                            <constraint firstItem="nwx-qE-q8Y" firstAttribute="leading" secondItem="JZJ-CH-HJx" secondAttribute="leading" constant="8" id="sVg-Wu-Xvp"/>
+                        </constraints>
+                    </view>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottomMargin" secondItem="nwx-qE-q8Y" secondAttribute="bottom" constant="1" id="AXY-5I-4Gk"/>
-                    <constraint firstItem="nwx-qE-q8Y" firstAttribute="trailing" secondItem="0k6-UW-CHe" secondAttribute="trailingMargin" id="fxv-Uz-VSP"/>
-                    <constraint firstItem="nwx-qE-q8Y" firstAttribute="width" relation="lessThanOrEqual" secondItem="0k6-UW-CHe" secondAttribute="width" multiplier="0.75" id="q3Q-Za-AXQ"/>
-                    <constraint firstItem="nwx-qE-q8Y" firstAttribute="top" secondItem="0k6-UW-CHe" secondAttribute="topMargin" id="vtl-1X-K9W"/>
+                    <constraint firstAttribute="bottom" secondItem="JZJ-CH-HJx" secondAttribute="bottom" constant="4" id="ELE-0q-GyY"/>
+                    <constraint firstItem="JZJ-CH-HJx" firstAttribute="top" secondItem="0k6-UW-CHe" secondAttribute="top" constant="4" id="LaN-lL-2WZ"/>
+                    <constraint firstItem="nwx-qE-q8Y" firstAttribute="width" relation="lessThanOrEqual" secondItem="0k6-UW-CHe" secondAttribute="width" multiplier="0.8" id="bZU-G5-O8a"/>
+                    <constraint firstAttribute="trailing" secondItem="JZJ-CH-HJx" secondAttribute="trailing" constant="4" id="wYY-Pq-GH5"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="9Vm-XY-ELk"/>
             <connections>
+                <outlet property="backgroundViewOfOutGoningMsg" destination="JZJ-CH-HJx" id="8mG-1h-49A"/>
                 <outlet property="labelOfOutGoingMessage" destination="nwx-qE-q8Y" id="LOX-qS-N4R"/>
             </connections>
             <point key="canvasLocation" x="138" y="10"/>

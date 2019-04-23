@@ -126,14 +126,14 @@ extension ConversationPresenter: NSFetchedResultsControllerDelegate {
         if controller != self.frc {return}
         switch type {
         case .insert:
-            self.tableViewToWorkWith.insertRows(at: [newIndexPath!], with: .automatic)
+            self.tableViewToWorkWith.insertRows(at: [newIndexPath!], with: .top)
         case .move:
-            self.tableViewToWorkWith.deleteRows(at: [indexPath!], with: .automatic)
-            self.tableViewToWorkWith.insertRows(at: [newIndexPath!], with: .automatic)
+            self.tableViewToWorkWith.deleteRows(at: [indexPath!], with: .top)
+            self.tableViewToWorkWith.insertRows(at: [newIndexPath!], with: .top)
         case .update:
-            self.tableViewToWorkWith.reloadRows(at: [indexPath!], with: .automatic)
+            self.tableViewToWorkWith.reloadRows(at: [indexPath!], with: .top)
         case .delete:
-            self.tableViewToWorkWith.deleteRows(at: [indexPath!], with: .automatic)
+            self.tableViewToWorkWith.deleteRows(at: [indexPath!], with: .top)
         @unknown default:
             print("FetchResultController back the uknowed Change type")
         }

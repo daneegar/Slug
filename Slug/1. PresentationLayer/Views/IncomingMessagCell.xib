@@ -1,40 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="inComingMessageCell" id="yuu-4o-dip" customClass="MessageCell" customModule="Talks" customModuleProvider="target">
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="inComingMessageCell" id="yuu-4o-dip" customClass="MessageCell" customModule="Slug" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="yuu-4o-dip" id="taj-rZ-S6u">
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Входящее сообщение" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6VP-Bf-RLl">
-                        <rect key="frame" x="16" y="11" width="240" height="22"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MVr-YC-MR7">
+                        <rect key="frame" x="4" y="4" width="193" height="35.5"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Входящее сообщение" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6VP-Bf-RLl">
+                                <rect key="frame" x="8" y="8" width="177" height="19.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.99332517389999997" green="0.87335634230000003" blue="0.1717742085" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <constraints>
+                            <constraint firstItem="6VP-Bf-RLl" firstAttribute="top" secondItem="MVr-YC-MR7" secondAttribute="top" constant="8" id="1NO-P4-XhO"/>
+                            <constraint firstItem="6VP-Bf-RLl" firstAttribute="leading" secondItem="MVr-YC-MR7" secondAttribute="leading" constant="8" id="ASK-FT-RC0"/>
+                            <constraint firstAttribute="bottom" secondItem="6VP-Bf-RLl" secondAttribute="bottom" constant="8" id="cy2-Zf-6lV"/>
+                            <constraint firstAttribute="trailing" secondItem="6VP-Bf-RLl" secondAttribute="trailing" constant="8" id="ubq-hx-F7y"/>
+                        </constraints>
+                    </view>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="6VP-Bf-RLl" firstAttribute="width" secondItem="taj-rZ-S6u" secondAttribute="width" multiplier="0.75" id="W0r-eM-DWq"/>
-                    <constraint firstItem="6VP-Bf-RLl" firstAttribute="top" secondItem="taj-rZ-S6u" secondAttribute="topMargin" id="ZHH-Ew-5d9"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="6VP-Bf-RLl" secondAttribute="bottom" id="gLS-Lt-uCV"/>
-                    <constraint firstItem="6VP-Bf-RLl" firstAttribute="leading" secondItem="taj-rZ-S6u" secondAttribute="leadingMargin" id="hrm-qs-GF8"/>
+                    <constraint firstItem="MVr-YC-MR7" firstAttribute="top" secondItem="taj-rZ-S6u" secondAttribute="top" constant="4" id="3LZ-LM-DWf"/>
+                    <constraint firstItem="6VP-Bf-RLl" firstAttribute="width" relation="lessThanOrEqual" secondItem="taj-rZ-S6u" secondAttribute="width" multiplier="0.8" id="PAt-YT-hSe"/>
+                    <constraint firstAttribute="bottom" secondItem="MVr-YC-MR7" secondAttribute="bottom" constant="4" id="VuE-Ju-a8g"/>
+                    <constraint firstItem="MVr-YC-MR7" firstAttribute="leading" secondItem="taj-rZ-S6u" secondAttribute="leading" constant="4" id="eQT-yM-0aE"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="fRg-wY-LbZ"/>
             <connections>
+                <outlet property="backgrounViewOfIncomingMsg" destination="MVr-YC-MR7" id="AX7-U7-JqF"/>
                 <outlet property="labelOfIncomingMessage" destination="6VP-Bf-RLl" id="4Oz-N9-2Da"/>
             </connections>
             <point key="canvasLocation" x="138" y="105"/>

@@ -12,24 +12,26 @@ class MessageCell: UITableViewCell {
 
     @IBOutlet weak var labelOfIncomingMessage: UILabel!
     @IBOutlet weak var labelOfOutGoingMessage: UILabel!
-
+    @IBOutlet weak var widthOfIncomingMsg: NSLayoutConstraint!
+    @IBOutlet weak var backgrounViewOfIncomingMsg: UIView!
+    @IBOutlet weak var backgroundViewOfOutGoningMsg: UIView!
+    
     var textToShow: String? = ""
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
     override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+        super.setSelected(false, animated: animated)
     }
 
     func setupCell(whithText text: String?, andTypeOf type: MessageType) {
         switch type {
         case .inComingMessage:
             self.labelOfIncomingMessage.text = text
+            self.backgrounViewOfIncomingMsg.layer.cornerRadius = 10
         case .outGoingMessage:
             self.labelOfOutGoingMessage.text = text
+            self.backgroundViewOfOutGoningMsg.layer.cornerRadius = 10
         }
     }
 

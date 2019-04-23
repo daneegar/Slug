@@ -31,10 +31,10 @@ class PictureViewController: UIViewController {
         self.configButton()
     }
     func configButton() {
-        self.saveButton.backgroundColor = .white
-        self.saveButton.layer.borderColor = UIColor(named: "black")?.cgColor
-        self.saveButton.layer.borderWidth = 1
         self.saveButton.layer.cornerRadius = 10
+        self.saveButton.layer.shadowRadius = 2.0
+        self.saveButton.layer.shadowOffset = .zero
+        self.saveButton.layer.shadowOpacity = 0.5
     }
 
 }
