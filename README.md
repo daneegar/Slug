@@ -17,3 +17,5 @@ MultiPeer made for only 8 users for session and has codebale protocol for PeerId
 Messages sending as **JSON** bunches. For codable messages responds MessageStruct witch can init Message Entiti of Core Data or been inited from it.
 
 There is one feature you can set as avatar some cat or made or use any photo from library. **API**: [api.thecatapi.com](http://api.thecatapi.com).
+
+Presenter with collection view of cats download images in async by **Operation Queue.**
