@@ -14,7 +14,7 @@ Core data was build in stack with chain of three contexts. Two in private queue 
 
 MultiPeer made for only 8 users for session and has codebale protocol for PeerId. He’s rule how displayName decode and encode to ID and Name of User.
 
-Messages sending as **JSON** bunches. For codable messages responds MessageStruct witch can init Message Entiti of Core Data or been inited from it.
+Messages sending as **JSON** bunches. For **codable** messages responds MessageStruct witch can init Message Entiti of Core Data or been inited from it.
 
 There is one feature you can set as avatar some cat or made or use any photo from library. **API**: [api.thecatapi.com](http://api.thecatapi.com).
 
