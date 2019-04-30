@@ -1,4 +1,4 @@
-Architecture - SOA in **SOLID** and **KISS** principles.
+Architecture - SOA in **SOLID** and **DRY** principles.
 
 **SOA** contains three levels, Presentation Layer, Service Layer and Core Layer.
 
@@ -11,6 +11,8 @@ Frameworks - **Core Data**, **multipeer connectivity**.
 Core data used in bunch with **Fetch Result Contoller** in Presenters witch implement DataSourse functional for UITableViews.
 
 Core data was build in stack with chain of three contexts. Two in private queue and one of the main queue.
+
+Any types of request to Core Data wrapped up to **generic** functions. So I can used its to any **NSManagedObjects** in project. 
 
 MultiPeer made for only 8 users for session and has codebale protocol for PeerId. He’s rule how displayName decode and encode to ID and Name of User.
 
