@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		19481EE7B2901BF5403A7EDA /* Pods_Slug.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED70F609EB3CB86DED8C8CC7 /* Pods_Slug.framework */; };
+		6B619E0E251CFFD1007EA1F7 /* keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6B619E0D251CFFD1007EA1F7 /* keys.plist */; };
 		923B413A22567E7000BFBB5E /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923B413922567E7000BFBB5E /* CoreDataStack.swift */; };
 		923B413F2256962800BFBB5E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 923B413E2256962800BFBB5E /* Main.storyboard */; };
 		923B41412256964100BFBB5E /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923B41402256964100BFBB5E /* ProfileViewController.swift */; };
@@ -32,7 +33,6 @@
 		923B416C22593A3700BFBB5E /* FRCManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923B416B22593A3700BFBB5E /* FRCManager.swift */; };
 		923FB931225B51EC005E0ABF /* CommunicationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923FB930225B51EC005E0ABF /* CommunicationManager.swift */; };
 		923FB934225B554E005E0ABF /* MessageStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923FB933225B554E005E0ABF /* MessageStruct.swift */; };
-		928C06842265E470003321D3 /* keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 928C06832265E470003321D3 /* keys.plist */; };
 		928C06862265EA9E003321D3 /* PicturesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C06852265EA9E003321D3 /* PicturesViewController.swift */; };
 		928C06882265EB22003321D3 /* PictureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C06872265EB22003321D3 /* PictureViewController.swift */; };
 		928C068A2265ECD3003321D3 /* PicturesViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C06892265ECD3003321D3 /* PicturesViewPresenter.swift */; };
@@ -55,6 +55,8 @@
 
 /* Begin PBXFileReference section */
 		42DC5C4201117D699679C168 /* Pods-Slug.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Slug.release.xcconfig"; path = "Target Support Files/Pods-Slug/Pods-Slug.release.xcconfig"; sourceTree = "<group>"; };
+		6B1BE168253736750031C9DA /* Slug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Slug.entitlements; sourceTree = "<group>"; };
+		6B619E0D251CFFD1007EA1F7 /* keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = keys.plist; sourceTree = "<group>"; };
 		923B413922567E7000BFBB5E /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		923B413E2256962800BFBB5E /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		923B41402256964100BFBB5E /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -79,7 +81,6 @@
 		923B416B22593A3700BFBB5E /* FRCManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FRCManager.swift; sourceTree = "<group>"; };
 		923FB930225B51EC005E0ABF /* CommunicationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommunicationManager.swift; sourceTree = "<group>"; };
 		923FB933225B554E005E0ABF /* MessageStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageStruct.swift; sourceTree = "<group>"; };
-		928C06832265E470003321D3 /* keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = keys.plist; sourceTree = "<group>"; };
 		928C06852265EA9E003321D3 /* PicturesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PicturesViewController.swift; path = "Slug/1. PresentationLayer/ViewControllers/PicturesViewController.swift"; sourceTree = SOURCE_ROOT; };
 		928C06872265EB22003321D3 /* PictureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PictureViewController.swift; path = "Slug/1. PresentationLayer/ViewControllers/PictureViewController.swift"; sourceTree = SOURCE_ROOT; };
 		928C06892265ECD3003321D3 /* PicturesViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicturesViewPresenter.swift; sourceTree = "<group>"; };
@@ -204,8 +205,9 @@
 		92BCB8EA22563FF70042261F /* Slug */ = {
 			isa = PBXGroup;
 			children = (
+				6B1BE168253736750031C9DA /* Slug.entitlements */,
 				92BCB8FA22563FF80042261F /* Info.plist */,
-				928C06832265E470003321D3 /* keys.plist */,
+				6B619E0D251CFFD1007EA1F7 /* keys.plist */,
 				92BCB908225640300042261F /* Supporting Files */,
 				92BCB905225640270042261F /* 1. PresentationLayer */,
 				92BCB902225640260042261F /* 2. ServiceLayer */,
@@ -389,7 +391,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				928C06842265E470003321D3 /* keys.plist in Resources */,
 				92BCB8F922563FF80042261F /* LaunchScreen.storyboard in Resources */,
 				923B415B22569A9E00BFBB5E /* ChatCell.xib in Resources */,
 				923B415C22569A9E00BFBB5E /* IncomingMessagCell.xib in Resources */,
@@ -397,6 +398,7 @@
 				923B415A22569A9E00BFBB5E /* OutGoingMessageCell.xib in Resources */,
 				92BCB915225645EA0042261F /* Default-568h@2x.png in Resources */,
 				92BCB8F622563FF80042261F /* Assets.xcassets in Resources */,
+				6B619E0E251CFFD1007EA1F7 /* keys.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -422,7 +424,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "${PODS_ROOT}/SwiftLint/swiftlint\ndiff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -604,18 +606,20 @@
 			baseConfigurationReference = E5590BC8A591E781B965EB55 /* Pods-Slug.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Slug/Slug.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YK7M3B2TGF;
 				INFOPLIST_FILE = Slug/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = denis.garifyanov.com.Slug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -624,18 +628,20 @@
 			baseConfigurationReference = 42DC5C4201117D699679C168 /* Pods-Slug.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Slug/Slug.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YK7M3B2TGF;
 				INFOPLIST_FILE = Slug/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = denis.garifyanov.com.Slug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

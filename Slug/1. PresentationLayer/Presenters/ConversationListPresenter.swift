@@ -9,7 +9,6 @@
 import Foundation
 import UIKit
 import CoreData.NSFetchedResultsController
-import AssetsLibrary
 
 protocol PresenterForConversationList: class, UITableViewDataSource {
     func presentMainUserView(presentType: PresentType)
