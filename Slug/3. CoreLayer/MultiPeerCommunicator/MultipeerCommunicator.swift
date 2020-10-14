@@ -8,6 +8,7 @@
 
 import Foundation
 import MultipeerConnectivity
+import AVFoundation
 
 protocol  CommunicatorDelegate: class {
     //discovering
@@ -54,17 +55,12 @@ class MultipeerCommunicator: NSObject, Communicator {
     
     func send(aMessage jsonData: Data,
               toUserId userID: String,
-              whitUserName userNname: String,
+              whitUserName userName: String,
               complitionHandler: ((Bool, Error?) -> Void)?) {
         
-        let displayName = MultipeerCommunicator.encodePeer(withId: userID, andName: userNname)
+        let displayName = MultipeerCommunicator.encodePeer(withId: userID, andName: userName)
         
-        guard let key = sessions.keys.first(where: {$0.displayName == displayName }) else {
-            complitionHandler?(false, nil)
-            return
-        }
-        
-        guard let session = sessions[key] else {
+        guard let session = getSession(encodedDisplayName: displayName) else {
             complitionHandler?(false, nil)
             return
         }
@@ -132,7 +128,7 @@ class MultipeerCommunicator: NSObject, Communicator {
             .data(using: .utf8)!.base64EncodedString()
     }
     
-    func getSession(forPeer peerID: MCPeerID) -> MCSession {
+    private func getSession(forPeer peerID: MCPeerID) -> MCSession {
         
         guard let sesssionForPeerId = sessions[peerID] else {
             let newSession = MCSession(peer: myPeerId,
@@ -146,6 +142,19 @@ class MultipeerCommunicator: NSObject, Communicator {
         }
         
         return sesssionForPeerId
+        
+    }
+    
+    private func getSession(encodedDisplayName displayName: String) -> MCSession? {
+        
+        guard
+            let key = sessions.keys.first(where: {$0.displayName == displayName }),
+            let session = sessions[key]
+        else {
+            return nil
+        }
+        
+        return session
         
     }
     
