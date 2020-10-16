@@ -1,16 +1,21 @@
 PODS:
+  - CameraKit-iOS (1.2.1)
   - SwiftLint (0.27.0)
 
 DEPENDENCIES:
+  - CameraKit-iOS
   - SwiftLint
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - SwiftLint
+  trunk:
+    - CameraKit-iOS
 
 SPEC CHECKSUMS:
+  CameraKit-iOS: 7a8aeb4b6ac93c59088ada934efb6010ed2394c1
   SwiftLint: 3207c1faa2240bf8973b191820a116113cd11073
 
-PODFILE CHECKSUM: 6e8c74b131fbbe51a1545ac70b703a6eb76bc1ce
+PODFILE CHECKSUM: b5219a078a3f603bfbcdc3023c65eea2eb98d8d0
 
 COCOAPODS: 1.9.1

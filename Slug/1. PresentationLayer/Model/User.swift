@@ -10,6 +10,6 @@ import Foundation
 
 extension User {
     func generateId () {
-        self.id = RandomData.generateUniqId()
+        self.id = UUID.init()
     }
 }

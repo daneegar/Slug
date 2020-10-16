@@ -2,13 +2,19 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string></string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string></string>
+	<key>NSCameraUsageDescription</key>
+	<string></string>
 	<key>NSBonjourServices</key>
 	<array>
-		<string>_tinkoff-chat._tcp</string>
-		<string>_tinkoff-chat._udp</string>
+		<string>_slugs-chat._tcp</string>
+		<string>_slugs-chat._udp</string>
 	</array>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>tinkoff-chat</string>
+	<string>slugs-chat</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>

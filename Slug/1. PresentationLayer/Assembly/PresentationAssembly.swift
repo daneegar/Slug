@@ -19,6 +19,7 @@ protocol IPresentationAssembly: class {
     func initSession()
     func present(conversation conv: Conversation)
     func presentProfileMainViewContoller()
+    func presentStreamPreviewController()
     func presentCollectionViewOfPhotos(sender view: UIViewController, delegate: TakeImageDelegate)
     func presentView(ofPhoto photo: UIImage, sender: UINavigationController?, delegate: TakeImageDelegate)
 }
@@ -44,6 +45,17 @@ class PresentationAssembly: IPresentationAssembly {
                                          presentationAssembly: self,
                                          windowToControl: self.curentWindow)
         }
+    }
+    
+    func presentStreamPreviewController() {
+        guard let nvc = self.storyboard.instantiateViewController(identifier: "streamPreviewContoller") as? StreamViewCotroller else {
+            return
+        }
+        DispatchQueue.main.async {
+            self.rootNavigationViewController?.present(nvc, animated: true)
+        }
+        
+        
     }
     
     func present(conversation conv: Conversation) {

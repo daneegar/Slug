@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-//import CoreData.NSFetchedResultsController
 
 protocol ConversationListViewControllerProtocol: UIViewController {
     var tableViewOfChats: UITableView! {get}
@@ -33,6 +32,10 @@ class ConversationListViewController: UIViewController, ConversationListViewCont
     
     @IBAction func showProfileViewController(_ sender: Any) {
         self.presenterUnwraped.presentMainUserView(presentType: .modal)
+    }
+    
+    @IBAction func beginStreamingButtonTapped(_ sender: Any) {
+        self.presenterUnwraped.presentStreamView(presentType: .modal)
     }
     
     override func viewDidLoad() {

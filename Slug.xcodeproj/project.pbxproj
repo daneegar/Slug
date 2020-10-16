@@ -3,11 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		19481EE7B2901BF5403A7EDA /* Pods_Slug.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED70F609EB3CB86DED8C8CC7 /* Pods_Slug.framework */; };
+		6B0FA816253786ED00FFA900 /* StreamHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B0FA815253786ED00FFA900 /* StreamHandler.swift */; };
+		6B0FA8222538883200FFA900 /* StreamViewCotroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B0FA8212538883200FFA900 /* StreamViewCotroller.swift */; };
 		6B619E0E251CFFD1007EA1F7 /* keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6B619E0D251CFFD1007EA1F7 /* keys.plist */; };
 		923B413A22567E7000BFBB5E /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 923B413922567E7000BFBB5E /* CoreDataStack.swift */; };
 		923B413F2256962800BFBB5E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 923B413E2256962800BFBB5E /* Main.storyboard */; };
@@ -55,6 +57,8 @@
 
 /* Begin PBXFileReference section */
 		42DC5C4201117D699679C168 /* Pods-Slug.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Slug.release.xcconfig"; path = "Target Support Files/Pods-Slug/Pods-Slug.release.xcconfig"; sourceTree = "<group>"; };
+		6B0FA815253786ED00FFA900 /* StreamHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamHandler.swift; sourceTree = "<group>"; };
+		6B0FA8212538883200FFA900 /* StreamViewCotroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamViewCotroller.swift; sourceTree = "<group>"; };
 		6B1BE168253736750031C9DA /* Slug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Slug.entitlements; sourceTree = "<group>"; };
 		6B619E0D251CFFD1007EA1F7 /* keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = keys.plist; sourceTree = "<group>"; };
 		923B413922567E7000BFBB5E /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
@@ -142,6 +146,7 @@
 				923B41442256965000BFBB5E /* ConversationViewController.swift */,
 				928C06852265EA9E003321D3 /* PicturesViewController.swift */,
 				928C06872265EB22003321D3 /* PictureViewController.swift */,
+				6B0FA8212538883200FFA900 /* StreamViewCotroller.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -259,6 +264,7 @@
 				923B416B22593A3700BFBB5E /* FRCManager.swift */,
 				92E48CCA225D401700337357 /* BackgroundStorageTasks.swift */,
 				928C068D22662174003321D3 /* Network.swift */,
+				6B0FA815253786ED00FFA900 /* StreamHandler.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -343,6 +349,7 @@
 				92BCB8E422563FF70042261F /* Sources */,
 				92BCB8E522563FF70042261F /* Frameworks */,
 				92BCB8E622563FF70042261F /* Resources */,
+				04D755C99037E2A26505BE35 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -405,6 +412,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		04D755C99037E2A26505BE35 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Slug/Pods-Slug-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Slug/Pods-Slug-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Slug/Pods-Slug-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		C4A153EA4856BAB835872F1D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -449,6 +473,7 @@
 				928C069622675872003321D3 /* ImageService.swift in Sources */,
 				923FB934225B554E005E0ABF /* MessageStruct.swift in Sources */,
 				928C06942267538F003321D3 /* CatsService.swift in Sources */,
+				6B0FA816253786ED00FFA900 /* StreamHandler.swift in Sources */,
 				923B41472256972100BFBB5E /* DatesHandler.swift in Sources */,
 				923B416A22592CB800BFBB5E /* ConversationPresenter.swift in Sources */,
 				92BCB913225644F40042261F /* CoreAssembly.swift in Sources */,
@@ -462,6 +487,7 @@
 				923B41432256964900BFBB5E /* ConversationListViewController.swift in Sources */,
 				928C068C22661BBF003321D3 /* PhotoCell.swift in Sources */,
 				928C068E22662174003321D3 /* Network.swift in Sources */,
+				6B0FA8222538883200FFA900 /* StreamViewCotroller.swift in Sources */,
 				923B415822569A9E00BFBB5E /* MessageCell.swift in Sources */,
 				92E48CCB225D401700337357 /* BackgroundStorageTasks.swift in Sources */,
 				923B41412256964100BFBB5E /* ProfileViewController.swift in Sources */,
@@ -607,6 +633,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Slug/Slug.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YK7M3B2TGF;
 				INFOPLIST_FILE = Slug/Info.plist;
@@ -617,7 +644,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = denis.garifyanov.com.Slug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTS_MACCATALYST = YES;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -629,6 +657,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Slug/Slug.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YK7M3B2TGF;
 				INFOPLIST_FILE = Slug/Info.plist;
@@ -639,7 +668,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = denis.garifyanov.com.Slug;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTS_MACCATALYST = YES;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

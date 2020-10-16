@@ -11,8 +11,8 @@ import CoreData
 
 protocol CommunicatorManagerSenderBrowsingAdvertising {
     func send(theMessage message: String?, inConversation conv: Conversation)
-    func set(userID: String, userName: String)
-    func begin(ifTrueAdvertisingFalseBrowsing mode: Bool)
+    func set(userID: UUID, userName: String)
+    func begin(inMode mode: CommunicatorMode)
 }
 
 protocol CommunicationManagerInjector {
@@ -30,17 +30,19 @@ extension CommunicationManagerInjector {
 class CommunicationManager: CommunicatorDelegate {
     
     var communicator: Communicator?
-    var peerID: String?
+    var peerID: UUID?
     var nameOfUser: String?
     init() {
     }
 
+    private let kServiceType = "slugs-chat"
+    private let keyForUserName = "userName"
     
     func didFoundUser(userID: String, userName: String?) {
         handleUser(userID: userID) { (user) in
             guard let user = user else {fatalError("user hasn't been finded os insered")}
             if user.id == nil {
-                user.id = userID
+                user.id = UUID.init(uuidString: userID)
             }
             if user.name != userName {
                 user.name = userName
@@ -51,7 +53,7 @@ class CommunicationManager: CommunicatorDelegate {
             } else {
                 self.createConversation(complition: { (conv) in
                     guard let conv = conv else {fatalError("Conversatoin hasn't been finded os insered")}
-                    conv.id = user.id
+                    conv.id = user.id?.uuidString
                     conv.isOffline = false
                     user.conversation = conv
                 })
@@ -106,7 +108,17 @@ class CommunicationManager: CommunicatorDelegate {
 }
 
 extension CommunicationManager: CommunicatorManagerSenderBrowsingAdvertising {
-    func begin(ifTrueAdvertisingFalseBrowsing browsing: Bool) {
+    
+    private func getConfigurator(forPeerId id: UUID,
+                                 andDisplayName name: String) -> MultipeerCommunicator.ServiceConfigurator {
+        
+        .init(serviceType: self.kServiceType,
+              discoveryInfo: [self.keyForUserName: name],
+              mcPeerId: .init(displayName: name, uuid: id))
+        
+    }
+    
+    func begin(inMode mode: CommunicatorMode) {
         guard let peerId = self.peerID else {
             print("\(#function) can't be execute because peedID doesnt configure")
             return
@@ -115,14 +127,22 @@ extension CommunicationManager: CommunicatorManagerSenderBrowsingAdvertising {
             print("\(#function) can't be execute because name doesnt configure")
             return
         }
-        self.communicator = MultipeerCommunicator(peerId, nameOfUser, self, browsing)
+        
+        let configurator = getConfigurator(forPeerId: peerId,
+                                                                                      andDisplayName: nameOfUser)
+        
+        self.communicator = MultipeerCommunicator.init(serviceConfigurator: configurator, mode: mode)
+        self.communicator?.delegate = self
     }
     
-    func set(userID: String, userName: String) {
+    func set(userID: UUID, userName: String) {
         self.peerID = userID
         self.nameOfUser = userName
         if self.communicator == nil {
-            self.communicator = MultipeerCommunicator(userID, userName, self, true)
+            let configurator = getConfigurator(forPeerId: userID,
+                                               andDisplayName: userName)
+            self.communicator = MultipeerCommunicator.init(serviceConfigurator: configurator, mode: .both)
+            self.communicator?.delegate = self
         }
     }
     
@@ -151,7 +171,7 @@ extension CommunicationManager: CommunicatorManagerSenderBrowsingAdvertising {
                 return
             }
             guard let communicator_ = self.communicator else { fatalError("\(#function) was ended with error")}
-            communicator_.send(aMessage: data, toUserId: userId, whitUserName: userName) { (messageSended, error) in
+            communicator_.send(aMessage: data, toUserId: userId.uuidString, whitUserName: userName) { (messageSended, error) in
                 if messageSended {
                     DispatchQueue.main.async {
                         self.addMessageToConv(theMessage: newMsg, inConversation: conv)
@@ -166,7 +186,7 @@ extension CommunicationManager: CommunicatorManagerSenderBrowsingAdvertising {
 }
 
 extension CommunicationManager {
-    private func addUserToStorage(userID id: String, complition: ((User)->Void)?){
+    private func addUserToStorage(userID id: UUID, complition: ((User)->Void)?){
         StorageManager.singleton.insert(in: .saveContext, aModel: User.self, complition: { (newUser) in
             if let user = newUser {
                 complition?(user)
@@ -174,8 +194,8 @@ extension CommunicationManager {
         })
     }
     
-    private func checkUserId(userID id: String, complition: (([User]) -> Void)?) {
-        StorageManager.singleton.findAll(ofType: User.self, in: .saveContext, byPropertyName: "id", withMatch: id) { (findedUsers) in
+    private func checkUserId(userID id: UUID, complition: (([User]) -> Void)?) {
+        StorageManager.singleton.findAll(ofType: User.self, in: .saveContext, byPropertyName: "id", withMatch: id.uuidString) { (findedUsers) in
             if let users = findedUsers {
                 complition?(users)
             }
@@ -185,9 +205,10 @@ extension CommunicationManager {
     
     func handleUser(userID id: String, complition: @escaping (User?) -> Void) {
         var blanc: User?
-        self.checkUserId(userID: id, complition: { (findedUsers) in
+        guard let uuid = UUID(uuidString: id) else { return }
+        self.checkUserId(userID: uuid, complition: { (findedUsers) in
             if findedUsers.isEmpty {
-                self.addUserToStorage(userID: id, complition: { (newUser) in
+                self.addUserToStorage(userID: uuid, complition: { (newUser) in
                     complition(newUser)
                 })
             } else {

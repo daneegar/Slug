@@ -7,4 +7,5 @@ target 'Slug' do
 
   # Pods for Slug
 pod 'SwiftLint'
+pod 'CameraKit-iOS'
 end

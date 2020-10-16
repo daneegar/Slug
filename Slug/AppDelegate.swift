@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         StorageManager.singleton.findOrInsert(in: .mainContext, aModel: MainUser.self) { (findedOrCreatedMainUser) in
             guard let mainUser = findedOrCreatedMainUser else {fatalError("Main user hasn't been created of finded \(#function)")}
             if !mainUser.wasInit {
-                mainUser.id = RandomData.generateUniqId()
+                mainUser.id = UUID()
                 mainUser.name = UIDevice.current.name
                 mainUser.avatar = UIImage(named: "placeholder-user")?.jpegData(compressionQuality: 1.0)
                 mainUser.wasInit = true

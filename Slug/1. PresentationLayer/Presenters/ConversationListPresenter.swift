@@ -14,6 +14,7 @@ protocol PresenterForConversationList: class, UITableViewDataSource {
     func presentMainUserView(presentType: PresentType)
     func showView(forItem indexPath: IndexPath, presentType: PresentType)
     func switcherWasToggled(isOn: Bool)
+    func presentStreamView(presentType: PresentType)
 }
 
 enum PresentType {
@@ -58,8 +59,13 @@ class ConversationListPresenter: NSObject, PresenterForConversationList, Communi
     }
     
     func switcherWasToggled(isOn: Bool) {
-        self.communicationManager.begin(ifTrueAdvertisingFalseBrowsing: isOn)
+        self.communicationManager.begin(inMode: .both)
     }
+    
+    func presentStreamView(presentType: PresentType) {
+        self.presentationAssembly.presentStreamPreviewController()
+    }
+    
     
     private func findOrInitTheMainUser(){
         StorageManager.singleton.findOrInsert(in: .mainContext, aModel: MainUser.self, complition: {(savedOrCreatedUser) in
